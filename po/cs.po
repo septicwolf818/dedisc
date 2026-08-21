@@ -1,0 +1,310 @@
+# Czech translation for Dedisc
+# Terminology aligned with official GNOME Czech translations
+# (GTK, Sound Juicer, Brasero).
+msgid ""
+msgstr ""
+"Project-Id-Version: dedisc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 22:08+0200\n"
+"PO-Revision-Date: 2026-08-21 23:13+0200\n"
+"Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
+"Language-Team: Czech\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: src/cd_ripper.py:124
+msgid "Unknown Artist"
+msgstr "Neznámý umělec"
+
+#: src/cd_ripper.py:125
+msgid "Unknown Album"
+msgstr "Neznámé album"
+
+#: src/cd_ripper.py:126
+#, python-brace-format
+msgid "Track {number}"
+msgstr "Stopa {number}"
+
+#: src/cd_ripper.py:162
+msgid "pycdio not installed"
+msgstr "pycdio není nainstalováno"
+
+#: src/cd_ripper.py:170
+msgid "Device is not an audio CD"
+msgstr "Zařízení není zvukové CD"
+
+#: src/settings.py:25
+msgid "Artist / Album / Track - Title"
+msgstr "Umělec / Album / Stopa - Název"
+
+#: src/settings.py:31
+msgid "Artist / Album / Track. Title"
+msgstr "Umělec / Album / Stopa. Název"
+
+#: src/settings.py:37
+msgid "Artist / Album / Title"
+msgstr "Umělec / Album / Název"
+
+#: src/settings.py:43
+msgid "Artist - Album / Track - Artist - Title"
+msgstr "Umělec - Album / Stopa - Umělec - Název"
+
+#: src/settings.py:49
+msgid "Artist / Album / Track - Title - Artist"
+msgstr "Umělec / Album / Stopa - Název - Umělec"
+
+#: src/settings.py:55
+msgid "Album / Track - Title"
+msgstr "Album / Stopa - Název"
+
+#: src/settings.py:61
+msgid "Album / Track - Artist - Title"
+msgstr "Album / Stopa - Umělec - Název"
+
+#: src/settings.py:67
+msgid "Artist / Track - Title"
+msgstr "Umělec / Stopa - Název"
+
+#: src/window.py:33 src/window.py:57 src/ui/about.py:16
+msgid "Dedisc"
+msgstr "Dedisc"
+
+#: src/window.py:61
+msgid "Eject Disc"
+msgstr "Vysunout disk"
+
+#: src/window.py:68
+msgid "Main Menu"
+msgstr "Hlavní nabídka"
+
+#: src/window.py:85
+msgid "Scanning…"
+msgstr "Probíhá analýza…"
+
+#: src/window.py:118
+msgid "Select all"
+msgstr "Vybrat vše"
+
+#: src/window.py:120
+msgid "Select none"
+msgstr "Zrušit výběr"
+
+#: src/window.py:125
+msgid "Rip selected"
+msgstr "Extrahovat vybrané"
+
+#: src/window.py:141 src/window.py:410
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: src/window.py:143
+msgid "Abort ripping"
+msgstr "Přerušit extrakci"
+
+#: src/window.py:175 src/ui/preferences.py:41
+msgid "Preferences"
+msgstr "Nastavení"
+
+#: src/window.py:176
+msgid "About"
+msgstr "O aplikaci"
+
+#: src/window.py:177
+msgid "Homepage"
+msgstr "Domovská stránka"
+
+#: src/window.py:225 src/window.py:227
+msgid "Preparing…"
+msgstr "Příprava…"
+
+#: src/window.py:266
+msgid "Ripping process exited unexpectedly"
+msgstr "Proces extrakce neočekávaně skončil"
+
+#: src/window.py:290
+msgid "Ripping cancelled"
+msgstr "Extrakce byla zrušena"
+
+#: src/window.py:290
+msgid "Ripping was cancelled."
+msgstr "Extrakce byla zrušena."
+
+#: src/window.py:295
+msgid "OK"
+msgstr "Budiž"
+
+#: src/window.py:319
+#, python-brace-format
+msgid "Overall: {percent}%"
+msgstr "Celkem: {percent} %"
+
+#: src/window.py:324
+#, python-brace-format
+msgid "Track {number}: {percent}%"
+msgstr "Stopa {number}: {percent} %"
+
+#: src/window.py:332 src/window.py:446
+msgid "Ripping finished"
+msgstr "Extrakce dokončena"
+
+#: src/window.py:335
+#, python-brace-format
+msgid "Ripping track {number}…"
+msgstr "Extrakce stopy {number}…"
+
+#: src/window.py:347
+#, python-brace-format
+msgid "ETA {time}"
+msgstr "Zbývající čas: {time}"
+
+#: src/window.py:358
+msgid "Cancelling…"
+msgstr "Ruší se…"
+
+#: src/window.py:390
+#, python-brace-format
+msgid "{} MB/s (×{:.1f})"
+msgstr "{} MB/s (×{:.1f})"
+
+#: src/window.py:405
+msgid "File already exists"
+msgstr "Soubor již existuje"
+
+#: src/window.py:406
+#, python-brace-format
+msgid "The file \"{path}\" already exists. What should be done?"
+msgstr "Soubor „{path}“ již existuje. Jak pokračovat?"
+
+#: src/window.py:408
+msgid "Overwrite"
+msgstr "Přepsat"
+
+#: src/window.py:409
+msgid "Skip"
+msgstr "Přeskočit"
+
+#: src/window.py:443
+msgid "Ripping failed"
+msgstr "Extrakce selhala"
+
+#: src/window.py:447
+msgid "All tracks ripped successfully."
+msgstr "Všechny stopy byly úspěšně extrahovány."
+
+#: src/window.py:566 src/ui/status_page.py:18
+msgid "Insert an audio CD to scan"
+msgstr "Vložte zvukové CD k analýze"
+
+#: src/ui/about.py:23
+msgid "An offline CD scanner and ripper for GNOME"
+msgstr "Offline analyzátor a extraktor zvukových CD pro GNOME"
+
+#: src/ui/about.py:24
+msgid "Website"
+msgstr "Webové stránky"
+
+#: src/ui/preferences.py:16
+msgid "Artist"
+msgstr "Umělec"
+
+#: src/ui/preferences.py:17
+msgid "Album"
+msgstr "Album"
+
+#: src/ui/preferences.py:18 src/ui/track_list.py:103
+msgid "Title"
+msgstr "Název"
+
+#: src/ui/preferences.py:49
+msgid "General"
+msgstr "Obecné"
+
+#: src/ui/preferences.py:52
+msgid "CD Drive"
+msgstr "Mechanika CD"
+
+#: src/ui/preferences.py:53
+msgid "Choose which drive to use when several are connected"
+msgstr ""
+"Vyberte mechaniku, kterou použít, je-li připojeno více mechanik"
+
+#: src/ui/preferences.py:56
+msgid "Drive"
+msgstr "Mechanika"
+
+#: src/ui/preferences.py:57
+msgid "Select a CD drive"
+msgstr "Vyberte mechaniku CD"
+
+#: src/ui/preferences.py:63
+msgid "Ripping"
+msgstr "Extrakce"
+
+#: src/ui/preferences.py:64
+msgid "Where ripped tracks are saved"
+msgstr "Kam se ukládají extrahované stopy"
+
+#: src/ui/preferences.py:67
+msgid "Output Folder"
+msgstr "Cílová složka"
+
+#: src/ui/preferences.py:69
+msgid "Choose…"
+msgstr "Vybrat…"
+
+#: src/ui/preferences.py:76
+msgid "Eject disc when ripping finishes"
+msgstr "Po dokončení extrakce vysunout disk"
+
+#: src/ui/preferences.py:77
+msgid "Open the tray automatically after all tracks are saved"
+msgstr ""
+"Po uložení všech stop automaticky otevřít mechaniku"
+
+#: src/ui/preferences.py:84
+msgid "File Naming"
+msgstr "Pojmenování souborů"
+
+#: src/ui/preferences.py:85
+msgid "Folder and file name pattern"
+msgstr "Šablona složek a názvů souborů"
+
+#: src/ui/preferences.py:117
+msgid "Output Format"
+msgstr "Výstupní formát"
+
+#: src/ui/preferences.py:118
+msgid "File format used when ripping tracks"
+msgstr ""
+"Formát souborů používaný při extrakci stop"
+
+#: src/ui/preferences.py:209
+msgid "Choose Output Folder"
+msgstr "Vybrat cílovou složku"
+
+#: src/ui/status_page.py:10
+msgid "No drive detected"
+msgstr "Nebyla zjištěna žádná mechanika"
+
+#: src/ui/status_page.py:11
+msgid "Check that a CD drive is connected"
+msgstr "Zkontrolujte, zda je připojena mechanika CD"
+
+#: src/ui/status_page.py:17
+msgid "No CD inserted"
+msgstr "Není vloženo žádné CD"
+
+#: src/ui/track_list.py:89
+msgid "Select"
+msgstr "Výběr"
+
+#: src/ui/track_list.py:96
+msgid "Track"
+msgstr "Stopa"
+
+#: src/ui/track_list.py:110
+msgid "Duration"
+msgstr "Délka"
