@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 22:08+0200\n"
-"PO-Revision-Date: 2026-08-21 22:45+0200\n"
+"PO-Revision-Date: 2026-08-21 23:33+0200\n"
 "Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -88,7 +88,7 @@ msgstr "Tout sélectionner"
 
 #: src/window.py:120
 msgid "Select none"
-msgstr "Tout désélectionner"
+msgstr "Ne rien sélectionner"
 
 #: src/window.py:125
 msgid "Rip selected"
@@ -132,7 +132,7 @@ msgstr "L'extraction a été annulée."
 
 #: src/window.py:295
 msgid "OK"
-msgstr "OK"
+msgstr "Valider"
 
 #: src/window.py:319
 #, python-brace-format

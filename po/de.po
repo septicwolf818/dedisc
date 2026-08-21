@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 22:08+0200\n"
-"PO-Revision-Date: 2026-08-21 22:45+0200\n"
+"PO-Revision-Date: 2026-08-21 23:30+0200\n"
 "Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #: src/cd_ripper.py:124
 msgid "Unknown Artist"
-msgstr "Unbekannter Interpret"
+msgstr "Unbekannter Künstler"
 
 #: src/cd_ripper.py:125
 msgid "Unknown Album"
@@ -24,7 +24,7 @@ msgstr "Unbekanntes Album"
 #: src/cd_ripper.py:126
 #, python-brace-format
 msgid "Track {number}"
-msgstr "Track {number}"
+msgstr "Titelnr. {number}"
 
 #: src/cd_ripper.py:162
 msgid "pycdio not installed"
@@ -35,36 +35,36 @@ msgid "Device is not an audio CD"
 msgstr "Das Gerät ist keine Audio-CD"
 
 #: src/settings.py:25
-msgid "Artist / Album / Track - Title"
-msgstr "Interpret / Album / Track - Titel"
+msgid "Artist / Album / Titelnr. - Title"
+msgstr "Künstler / Album / Track - Titel"
 
 #: src/settings.py:31
-msgid "Artist / Album / Track. Title"
-msgstr "Interpret / Album / Track. Titel"
+msgid "Artist / Album / Titelnr. Title"
+msgstr "Künstler / Album / Track. Titel"
 
 #: src/settings.py:37
 msgid "Artist / Album / Title"
-msgstr "Interpret / Album / Titel"
+msgstr "Künstler / Album / Titel"
 
 #: src/settings.py:43
-msgid "Artist - Album / Track - Artist - Title"
-msgstr "Interpret - Album / Track - Interpret - Titel"
+msgid "Artist - Album / Titelnr. - Artist - Title"
+msgstr "Künstler - Album / Track - Künstler - Titel"
 
 #: src/settings.py:49
-msgid "Artist / Album / Track - Title - Artist"
-msgstr "Interpret / Album / Track - Titel - Interpret"
+msgid "Artist / Album / Titelnr. - Title - Artist"
+msgstr "Künstler / Album / Track - Titel - Künstler"
 
 #: src/settings.py:55
-msgid "Album / Track - Title"
-msgstr "Album / Track - Titel"
+msgid "Album / Titelnr. - Title"
+msgstr "Album / Titelnr. - Titel"
 
 #: src/settings.py:61
-msgid "Album / Track - Artist - Title"
-msgstr "Album / Track - Interpret - Titel"
+msgid "Album / Titelnr. - Artist - Title"
+msgstr "Album / Track - Künstler - Titel"
 
 #: src/settings.py:67
-msgid "Artist / Track - Title"
-msgstr "Interpret / Track - Titel"
+msgid "Artist / Titelnr. - Title"
+msgstr "Künstler / Track - Titel"
 
 #: src/window.py:33 src/window.py:57 src/ui/about.py:16
 msgid "Dedisc"
@@ -72,7 +72,7 @@ msgstr "Dedisc"
 
 #: src/window.py:61
 msgid "Eject Disc"
-msgstr "Disc auswerfen"
+msgstr "Medium auswerfen"
 
 #: src/window.py:68
 msgid "Main Menu"
@@ -80,7 +80,7 @@ msgstr "Hauptmenü"
 
 #: src/window.py:85
 msgid "Scanning…"
-msgstr "Wird gescannt …"
+msgstr "Analyse läuft …"
 
 #: src/window.py:118
 msgid "Select all"
@@ -88,11 +88,11 @@ msgstr "Alle auswählen"
 
 #: src/window.py:120
 msgid "Select none"
-msgstr "Auswahl aufheben"
+msgstr "Nichts auswählen"
 
 #: src/window.py:125
 msgid "Rip selected"
-msgstr "Auswahl rippen"
+msgstr "Auswahl auslesen"
 
 #: src/window.py:141 src/window.py:410
 msgid "Cancel"
@@ -100,7 +100,7 @@ msgstr "Abbrechen"
 
 #: src/window.py:143
 msgid "Abort ripping"
-msgstr "Rippen abbrechen"
+msgstr "Auslesen abbrechen"
 
 #: src/window.py:175 src/ui/preferences.py:41
 msgid "Preferences"
@@ -120,15 +120,15 @@ msgstr "Wird vorbereitet …"
 
 #: src/window.py:266
 msgid "Ripping process exited unexpectedly"
-msgstr "Der Rip-Vorgang wurde unerwartet beendet"
+msgstr "Der Auslesevorgang wurde unerwartet beendet"
 
 #: src/window.py:290
 msgid "Ripping cancelled"
-msgstr "Rippen abgebrochen"
+msgstr "Auslesen abgebrochen"
 
 #: src/window.py:290
 msgid "Ripping was cancelled."
-msgstr "Das Rippen wurde abgebrochen."
+msgstr "Das Auslesen wurde abgebrochen."
 
 #: src/window.py:295
 msgid "OK"
@@ -142,21 +142,21 @@ msgstr "Gesamt: {percent} %"
 #: src/window.py:324
 #, python-brace-format
 msgid "Track {number}: {percent}%"
-msgstr "Track {number}: {percent} %"
+msgstr "Titelnr. {number}: {percent} %"
 
 #: src/window.py:332 src/window.py:446
 msgid "Ripping finished"
-msgstr "Rippen abgeschlossen"
+msgstr "Auslesen abgeschlossen"
 
 #: src/window.py:335
 #, python-brace-format
 msgid "Ripping track {number}…"
-msgstr "Track {number} wird gerippt …"
+msgstr "Titel {number} wird ausgelesen …"
 
 #: src/window.py:347
 #, python-brace-format
 msgid "ETA {time}"
-msgstr "Restzeit {time}"
+msgstr "Verbleibende Zeit: {time}"
 
 #: src/window.py:358
 msgid "Cancelling…"
@@ -186,19 +186,19 @@ msgstr "Überspringen"
 
 #: src/window.py:443
 msgid "Ripping failed"
-msgstr "Rippen fehlgeschlagen"
+msgstr "Auslesen fehlgeschlagen"
 
 #: src/window.py:447
 msgid "All tracks ripped successfully."
-msgstr "Alle Titel wurden erfolgreich gerippt."
+msgstr "Alle Titel wurden erfolgreich ausgelesen."
 
 #: src/window.py:566 src/ui/status_page.py:18
 msgid "Insert an audio CD to scan"
-msgstr "Legen Sie eine Audio-CD zum Scannen ein"
+msgstr "Legen Sie eine Audio-CD zum Analysieren ein"
 
 #: src/ui/about.py:23
 msgid "An offline CD scanner and ripper for GNOME"
-msgstr "Ein Offline-CD-Scanner und -Ripper für GNOME"
+msgstr "Offline-Programm zum Analysieren und Auslesen von CDs für GNOME"
 
 #: src/ui/about.py:24
 msgid "Website"
@@ -206,7 +206,7 @@ msgstr "Webseite"
 
 #: src/ui/preferences.py:16
 msgid "Artist"
-msgstr "Interpret"
+msgstr "Künstler"
 
 #: src/ui/preferences.py:17
 msgid "Album"
@@ -239,11 +239,11 @@ msgstr "CD-Laufwerk auswählen"
 
 #: src/ui/preferences.py:63
 msgid "Ripping"
-msgstr "Rippen"
+msgstr "Auslesen"
 
 #: src/ui/preferences.py:64
 msgid "Where ripped tracks are saved"
-msgstr "Wo gerippte Titel gespeichert werden"
+msgstr "Wo ausgelesene Titel gespeichert werden"
 
 #: src/ui/preferences.py:67
 msgid "Output Folder"
@@ -255,7 +255,7 @@ msgstr "Auswählen …"
 
 #: src/ui/preferences.py:76
 msgid "Eject disc when ripping finishes"
-msgstr "Disc nach Abschluss des Rippens auswerfen"
+msgstr "Medium nach Abschluss des Auslesens auswerfen"
 
 #: src/ui/preferences.py:77
 msgid "Open the tray automatically after all tracks are saved"
@@ -275,7 +275,7 @@ msgstr "Ausgabeformat"
 
 #: src/ui/preferences.py:118
 msgid "File format used when ripping tracks"
-msgstr "Beim Rippen der Titel verwendetes Dateiformat"
+msgstr "Beim Auslesen der Titel verwendetes Dateiformat"
 
 #: src/ui/preferences.py:209
 msgid "Choose Output Folder"
@@ -299,7 +299,7 @@ msgstr "Auswahl"
 
 #: src/ui/track_list.py:96
 msgid "Track"
-msgstr "Track"
+msgstr "Titelnr."
 
 #: src/ui/track_list.py:110
 msgid "Duration"

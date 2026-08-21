@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-21 20:48+0200\n"
-"PO-Revision-Date: 2026-08-20 00:00+0000\n"
+"PO-Revision-Date: 2026-08-21 23:25+0200\n"
 "Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -80,7 +80,7 @@ msgstr "Menu główne"
 
 #: src/window.py:85
 msgid "Scanning…"
-msgstr "Skanowanie…"
+msgstr "Analizowanie…"
 
 #: src/window.py:118
 msgid "Select all"
@@ -194,11 +194,11 @@ msgstr "Wszystkie utwory zostały pomyślnie zgrane."
 
 #: src/window.py:566 src/ui/status_page.py:18
 msgid "Insert an audio CD to scan"
-msgstr "Włóż płytę audio CD do skanowania"
+msgstr "Włóż płytę audio CD do analizy"
 
 #: src/ui/about.py:23
 msgid "An offline CD scanner and ripper for GNOME"
-msgstr "Offline'owy skaner i ripper CD dla GNOME"
+msgstr "Program do analizowania i zgrywania płyt CD działający w trybie offline dla GNOME"
 
 #: src/ui/about.py:24
 msgid "Website"
@@ -246,7 +246,7 @@ msgstr "Gdzie zapisywane są zgrywane ścieżki"
 
 #: src/ui/preferences.py:67
 msgid "Output Folder"
-msgstr "Folder wyjściowy"
+msgstr "Katalog docelowy"
 
 #: src/ui/preferences.py:69
 msgid "Choose…"
@@ -302,4 +302,4 @@ msgstr "Ścieżka"
 
 #: src/ui/track_list.py:110
 msgid "Duration"
-msgstr "Czas"
+msgstr "Czas trwania"
