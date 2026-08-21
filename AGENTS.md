@@ -1,4 +1,4 @@
-# Dedisc — OpenCode Instructions
+# Dedisc - OpenCode Instructions
 
 ## What we're building
 
@@ -15,7 +15,7 @@ App id: `pl.septicwolf818.Dedisc` (reverse domain of septicwolf818.pl).
 | Build | Makefile (copy-based installer, no root); meson-python optional for system-wide packaging |
 | Drive discovery | PyGObject `Gio.DBusProxy` → UDisks2 D-Bus API |
 | CD metadata | `pycdio` (PyPI, wraps libcdio) for TOC + CD-Text |
-| Disc ID | `discid` (PyPI) — optional library for future use |
+| Disc ID | `discid` (PyPI) - optional library for future use |
 | i18n | GNU gettext (`po/pl.po`, all UI strings) |
 
 **System deps:** `gtk4`, `libadwaita`, `python-gobject`, `libcdio`, `libdiscid`, `udisks2`, `swig` (Arch: `pacman -S gtk4 libadwaita libcdio libdiscid udisks2 python-gobject swig`). `python-gobject` provides the `gi` module (`python-pycairo` alone is not enough); `swig` is required to build `pycdio` from source. MP3 uses `lameenc` (pip, bundles its own LAME) so needs no extra system package.
@@ -25,15 +25,15 @@ App id: `pl.septicwolf818.Dedisc` (reverse domain of septicwolf818.pl).
 ## Commands
 
 ```bash
-# Primary installer (copy-based, no root) — handles venv + patched pycdio + deps
+# Primary installer (copy-based, no root) - handles venv + patched pycdio + deps
 make install      # install to ~/.local/share/Dedisc + launcher/desktop entry
 make run          # dev: local venv, install deps, run from source
 make uninstall    # remove installed files and venv
 
 # (dev run requires the venv from `make run`; do NOT run `python3 src/main.py`
-#  directly — the deps are not in the system Python)
+#  directly - the deps are not in the system Python)
 
-# i18n — extract new strings
+# i18n - extract new strings
 xgettext --from-code=UTF-8 --language=Python \
   --keyword=_ --keyword=n_:1,2 \
   --output=po/dedisc.pot src/*.py src/ui/*.py
@@ -47,14 +47,14 @@ home, no root). `meson.build` + `pyproject.toml` provide an **optional**
 meson-python packaging path for system-wide/distro installs:
 `meson setup build --prefix=/usr && ninja -C build && meson install -C build`.
 `requirements.txt` holds runtime deps, `requirements-build.txt` holds build
-deps — never mix them.
+deps - never mix them.
 
 ## Critical constraints (agent gotchas)
 
 - **Never use shell scripts or subprocess for CD detection.** Use `Gio.DBusProxy` for UDisks2 and `pycdio` for disc reading. This is a firm rule from the architecture decision.
-- All user-facing strings must be wrapped in `_()` — no hardcoded UI text, even in error messages/tooltips/placeholders.
+- All user-facing strings must be wrapped in `_()` - no hardcoded UI text, even in error messages/tooltips/placeholders.
 - Polish locale (`pl`) is the initial/primary translation target. Default system fallback should work. Test with `LANGUAGE=pl python3 src/main.py`.
-- CD-Text may be absent on many discs — always handle `None` titles gracefully (fallback: `"…"`, tooltip: _("Track title is not available on this CD")).
+- CD-Text may be absent on many discs - always handle `None` titles gracefully (fallback: `"…"`, tooltip: _("Track title is not available on this CD")).
 - Audio frame duration uses the CD-DA standard of **75 frames per second** (not 44100 Hz audio). Use `frames / 75`.
 
 ## Architecture outline
@@ -67,12 +67,12 @@ main.py ──▶ window.py (Adw.ApplicationWindow)
                  ├── settings.py    (settings persistence, naming schemes, formats)
                  ├── ui/track_list.py  (Gtk.ColumnView + ListStore)
                  ├── ui/preferences.py (Adw.PreferencesWindow + live path preview)
-                 └── ui/status_page.py (Adw.StatusPage — no-drive / no-media states)
+                 └── ui/status_page.py (Adw.StatusPage - no-drive / no-media states)
 ```
 
 Data flow: UDisks2 DBus signal → `CDManager` → `GLib.idle_add(event)` → window switches to SCANNING state → `CDReader.scan_cd` reads TOC/CD-Text → window switches to LOADED state → populate track list → `CDRipper.rip` in a worker thread → `GLib.idle_add` progress + conflict dialogs.
 
-**Always marshal UI updates via `GLib.idle_add()` — never touch GTK from background threads.**
+**Always marshal UI updates via `GLib.idle_add()` - never touch GTK from background threads.**
 
 ## Quick dependency check (paste if new environment)
 

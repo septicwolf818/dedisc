@@ -1,4 +1,4 @@
-# Dedisc — Offline CD ripper for GNOME
+# Dedisc - Offline CD ripper for GNOME
 
 An offline GTK4/libadwaita CD scanner and ripper for Linux. Detect optical drives via UDisks2, read TOC and CD-Text with pycdio, preview album/track info, and rip tracks to WAV/FLAC/MP3. No network calls.
 
@@ -24,7 +24,7 @@ pacman -S gtk4 libadwaita libcdio udisks2 python-gobject swig
 `swig` is required to build `pycdio` from source. All Python
 dependencies (including a patched `pycdio` for Python 3.14 and `lameenc`
 for MP3) are installed automatically into a bundled venv by the Makefile
-below — no manual `pip install` needed.
+below - no manual `pip install` needed.
 
 ## Install
 
@@ -79,7 +79,7 @@ Issues and patches are welcome. Keep UI strings wrapped in `_()`. Prefer English
 
 ## License
 
-MIT — see `LICENSE`.
+MIT - see `LICENSE`.
 
 Author: Rafał Widło <rafal.widlo@gmail.com>
 
