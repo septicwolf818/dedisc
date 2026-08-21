@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 19:50+0200\n"
+"POT-Creation-Date: 2026-08-21 20:48+0200\n"
 "PO-Revision-Date: 2026-08-20 00:00+0000\n"
 "Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
 "Language-Team: Polish\n"
@@ -94,7 +94,7 @@ msgstr "Odznacz wszystkie"
 msgid "Rip selected"
 msgstr "Zgraj zaznaczone"
 
-#: src/window.py:141 src/window.py:409
+#: src/window.py:141 src/window.py:410
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -120,7 +120,7 @@ msgstr "Przygotowywanie…"
 
 #: src/window.py:266
 msgid "Ripping process exited unexpectedly"
-msgstr ""
+msgstr "Proces zgrywania zakończył się nieoczekiwanie"
 
 #: src/window.py:290
 msgid "Ripping cancelled"
@@ -130,63 +130,67 @@ msgstr "Zgrywanie przerwane"
 msgid "Ripping was cancelled."
 msgstr "Zgrywanie zostało przerwane"
 
-#: src/window.py:294 src/window.py:447
+#: src/window.py:295
 msgid "OK"
 msgstr "OK"
 
-#: src/window.py:318
+#: src/window.py:319
 #, python-brace-format
 msgid "Overall: {percent}%"
 msgstr "Łącznie: {percent}%"
 
-#: src/window.py:323
+#: src/window.py:324
 #, python-brace-format
 msgid "Track {number}: {percent}%"
 msgstr "Ścieżka {number}: {percent}%"
 
-#: src/window.py:331
+#: src/window.py:332 src/window.py:446
 msgid "Ripping finished"
 msgstr "Zgrywanie zakończone"
 
-#: src/window.py:334
+#: src/window.py:335
 #, python-brace-format
 msgid "Ripping track {number}…"
 msgstr "Zgrywanie ścieżki {number}…"
 
-#: src/window.py:346
+#: src/window.py:347
 #, python-brace-format
 msgid "ETA {time}"
 msgstr "ETA {time}"
 
-#: src/window.py:357
+#: src/window.py:358
 msgid "Cancelling…"
 msgstr "Anulowanie…"
 
-#: src/window.py:389
+#: src/window.py:390
 #, python-brace-format
 msgid "{} MB/s (×{:.1f})"
 msgstr "{} MB/s (×{:.1f})"
 
-#: src/window.py:404
+#: src/window.py:405
 msgid "File already exists"
 msgstr "Plik już istnieje"
 
-#: src/window.py:405
-#, fuzzy, python-brace-format
+#: src/window.py:406
+#, python-brace-format
 msgid "The file \"{path}\" already exists. What should be done?"
 msgstr "Plik „{path}” już istnieje. Co należy zrobić?"
 
-#: src/window.py:407
+#: src/window.py:408
 msgid "Overwrite"
 msgstr "Nadpisz"
 
-#: src/window.py:408
+#: src/window.py:409
 msgid "Skip"
 msgstr "Pomiń"
 
-#: src/window.py:444
+#: src/window.py:443
 msgid "Ripping failed"
 msgstr "Błąd zgrywania"
+
+#: src/window.py:447
+msgid "All tracks ripped successfully."
+msgstr "Wszystkie utwory zostały pomyślnie zgrane."
 
 #: src/window.py:566 src/ui/status_page.py:18
 msgid "Insert an audio CD to scan"

@@ -440,13 +440,12 @@ class RipperWindow(Adw.ApplicationWindow):
                 and self._cd_manager is not None and self._current_cd_info is not None:
             self._cd_manager.eject_drive(self._current_cd_info.drive_object_path)
         if error_message:
-            dialog = Adw.MessageDialog.new(
-                self,
-                _("Ripping failed"),
-                error_message,
+            self._show_dialog(_("Ripping failed"), error_message)
+        else:
+            self._show_dialog(
+                _("Ripping finished"),
+                _("All tracks ripped successfully."),
             )
-            dialog.add_response("ok", _("OK"))
-            dialog.present()
         return False
 
     def show_preferences(self):
