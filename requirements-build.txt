@@ -1,0 +1,2 @@
+meson-python>=0.20.0
+ninja>=1.13.0

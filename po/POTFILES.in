@@ -1,0 +1,10 @@
+src/main.py
+src/window.py
+src/cd_manager.py
+src/cd_reader.py
+src/cd_ripper.py
+src/settings.py
+src/ui/track_list.py
+src/ui/status_page.py
+src/ui/preferences.py
+src/ui/about.py

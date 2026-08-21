@@ -1,0 +1,4 @@
+* text eol=lf
+*.py linguist-language=Python
+*.pot linguist-language=Python
+*.po linguist-language=Python

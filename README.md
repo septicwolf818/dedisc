@@ -1,0 +1,84 @@
+# Dedisc — Offline CD ripper for GNOME
+
+An offline GTK4/libadwaita CD scanner and ripper for Linux. Detect optical drives via UDisks2, read TOC and CD-Text with pycdio, preview album/track info, and rip tracks to WAV/FLAC/MP3. No network calls.
+
+## Features
+
+- Automatic optical drive detection with UDisks2
+- TOC/CD-Text reading with `pycdio`
+- Album/track list with selectable tracks
+- Preferences: drive selection, output folder, naming schemes, output format
+- Live preview of destination path using the first track of the inserted disc
+- Ripping to WAV/FLAC/MP3 with on-the-fly encoding via `soundfile`
+- Conflict handling: overwrite / skip / cancel
+- Gettext i18n with on-demand `.mo` compilation for development
+
+## System dependencies
+
+Arch Linux:
+
+```bash
+pacman -S gtk4 libadwaita libcdio udisks2 python-gobject swig
+```
+
+Python packages from Arch can be installed via pacman:
+- `python-pycdio` (requires `swig`)
+- `python-discid`
+
+The rest (numpy, soundfile) are installed via pip. Runtime dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Build & install
+
+```bash
+meson setup build --prefix=/usr
+ninja -C build
+meson install -C build
+```
+
+Run from source without install:
+
+```bash
+PYTHONPATH=. python3 src/main.py
+```
+
+## Usage
+
+1. Insert an audio CD.
+2. Dedisc scans the disc, shows artist/album/track list.
+3. Select tracks.
+4. Open *Preferences* (Ctrl+,) to set output folder, naming scheme and format.
+5. Click *Zgraj zaznaczone* to rip.
+
+## Development
+
+Translations are handled via gettext. Extract new strings:
+
+```bash
+xgettext --from-code=UTF-8 --language=Python \
+  --keyword=_ --keyword=n_:1,2 \
+  --output=po/dedisc.pot src/*.py src/ui/*.py
+```
+
+Verify translations:
+
+```bash
+msgfmt --check -o /dev/null po/pl.po
+```
+
+The i18n module compiles `po/pl.po` → `po/pl/LC_MESSAGES/dedisc.mo` on demand when running from source.
+
+## Contributing
+
+Issues and patches are welcome. Keep UI strings wrapped in `_()`. Prefer English as source language.
+
+## License
+
+MIT — see `LICENSE`.
+
+Author: Rafał Widło <rafal.widlo@gmail.com>
+
+Website: https://septicwolf818.pl

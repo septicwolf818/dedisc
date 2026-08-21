@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+build/
+/meson-*
+po/**/*.mo
+po/*.pot
+po/pl/
+dist/
+*.egg-info/
+.pytest_cache/

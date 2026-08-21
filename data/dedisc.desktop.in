@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Dedisc
+GenericName=Compact Disc Ripper
+Comment=Rip and scan audio CDs on Linux
+Exec=@BIN_PATH@ %f
+Icon=pl.septicwolf818.Dedisc
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;
+StartupNotify=true
+StartupWMClass=pl.septicwolf818.Dedisc
+MimeType=x-content/audio-cdda;

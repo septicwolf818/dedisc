@@ -1,0 +1,7 @@
+PyGObject>=3.46
+pycdio>=2.1.0
+discid>=1.4.0
+numpy>=1.26
+soundfile>=0.12
+mutagen>=1.45
+lameenc>=1.8
