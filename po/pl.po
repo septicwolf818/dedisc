@@ -79,8 +79,8 @@ msgid "Main Menu"
 msgstr "Menu główne"
 
 #: src/window.py:85
-msgid "Scanning..."
-msgstr "Skanowanie..."
+msgid "Scanning…"
+msgstr "Skanowanie…"
 
 #: src/window.py:118
 msgid "Select all"
@@ -303,53 +303,3 @@ msgstr "Ścieżka"
 #: src/ui/track_list.py:110
 msgid "Duration"
 msgstr "Czas"
-
-#, python-format
-#~ msgid "Ejected drive %s"
-#~ msgstr "Wysunięto napęd %s"
-
-#, python-format
-#~ msgid "Eject failed for %s: %s"
-#~ msgstr "Nie udało się wysunąć %s: %s"
-
-#~ msgid "Preview"
-#~ msgstr "Podgląd"
-
-#~ msgid "Example destination for the first track"
-#~ msgstr "Przykładowa lokalizacja pierwszej ścieżki"
-
-#~ msgid "_Cancel"
-#~ msgstr "Anuluj"
-
-#~ msgid "Refresh"
-#~ msgstr "Odśwież"
-
-#~ msgid "Audio CD detected"
-#~ msgstr "Wykryto płytę audio CD"
-
-#~ msgid " tracks found"
-#~ msgstr " ścieżek znaleziono"
-
-#~ msgid "%d track found"
-#~ msgstr "%d ścieżka znaleziona"
-
-#~ msgid "%d tracks found"
-#~ msgstr "%d ścieżki znaleziono"
-
-#~ msgid "Track title is not available on this CD"
-#~ msgstr "Tytuł ścieżki nie jest dostępny na tej płycie"
-
-#~ msgid "CD-Text metadata unavailable"
-#~ msgstr "Metadane CD-Text są niedostępne"
-
-#~ msgid "{number}. {title}  ({duration})"
-#~ msgstr "{number}. {title}  ({duration})"
-
-#~ msgid "Drive Error"
-#~ msgstr "Błąd napędu"
-
-#~ msgid "Failed to read drive information"
-#~ msgstr "Nie udało się odczytać informacji o napędzie"
-
-#~ msgid "Checking for optical drives..."
-#~ msgstr "Sprawdzanie napędów optycznych..."

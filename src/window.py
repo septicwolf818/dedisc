@@ -82,7 +82,7 @@ class RipperWindow(Adw.ApplicationWindow):
         self.scanning_page.set_valign(Gtk.Align.CENTER)
         spinner = Gtk.Spinner()
         spinner.start()
-        label = Gtk.Label(label=_("Scanning..."))
+        label = Gtk.Label(label=_("Scanning…"))
         self.scanning_page.append(spinner)
         self.scanning_page.append(label)
         self.stack.add_named(self.scanning_page, "scanning")
