@@ -7,7 +7,7 @@ from src.i18n import _
 from src.settings import APP_ID
 
 VERSION = '0.1.0'
-HOMEPAGE_URL = 'https://github.com/anomalyco/dedisc'
+HOMEPAGE_URL = 'https://github.com/septicwolf818/dedisc'
 DEVELOPER = 'Rafał Widło'
 DEVELOPER_URL = 'https://septicwolf818.pl'
 
