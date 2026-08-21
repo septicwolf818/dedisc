@@ -157,6 +157,8 @@ class RipperWindow(Adw.ApplicationWindow):
 
         self.stack.add_named(self.content_box, "loaded")
 
+        self.connect('close-request', self._on_close_request)
+
         self.stack.set_visible_child_name("no-drive")
 
         self._cd_manager = CDManager(on_event=self._on_cd_event)
@@ -346,6 +348,24 @@ class RipperWindow(Adw.ApplicationWindow):
             self._rip_cancel.set()
         self.abort_button.set_sensitive(False)
         self.rip_progress_label.set_text(_("Cancelling…"))
+
+    def _on_close_request(self, *args):
+        # Don't leave the rip subprocess orphaned when the window is closed.
+        if self._rip_process is not None and self._rip_process.is_alive():
+            if self._rip_cancel is not None:
+                self._rip_cancel.set()
+            self._rip_process.terminate()
+            self._rip_process.join(timeout=3)
+            if self._rip_process.is_alive():
+                self._rip_process.kill()
+                self._rip_process.join(timeout=3)
+        self._rip_process = None
+        self._rip_queue = None
+        self._rip_cancel = None
+        if self._rip_timer:
+            GLib.source_remove(self._rip_timer)
+            self._rip_timer = None
+        return False
 
     @staticmethod
     def _format_speed(bps: float) -> str:
