@@ -53,7 +53,7 @@ meson install -C build            # installs to prefix, incl. .mo translations
 2. Dedisc scans the disc, shows artist/album/track list.
 3. Select tracks.
 4. Open *Preferences* (Ctrl+,) to set output folder, naming scheme and format.
-5. Click *Zgraj zaznaczone* to rip.
+5. Click *Rip selected* to rip.
 
 ## Development
 
