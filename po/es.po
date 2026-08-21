@@ -1,0 +1,307 @@
+# Spanish translation for Dedisc
+msgid ""
+msgstr ""
+"Project-Id-Version: dedisc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 22:08+0200\n"
+"PO-Revision-Date: 2026-08-21 22:45+0200\n"
+"Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/cd_ripper.py:124
+msgid "Unknown Artist"
+msgstr "Artista desconocido"
+
+#: src/cd_ripper.py:125
+msgid "Unknown Album"
+msgstr "Álbum desconocido"
+
+#: src/cd_ripper.py:126
+#, python-brace-format
+msgid "Track {number}"
+msgstr "Pista {number}"
+
+#: src/cd_ripper.py:162
+msgid "pycdio not installed"
+msgstr "pycdio no está instalado"
+
+#: src/cd_ripper.py:170
+msgid "Device is not an audio CD"
+msgstr "El dispositivo no es un CD de audio"
+
+#: src/settings.py:25
+msgid "Artist / Album / Track - Title"
+msgstr "Artista / Álbum / Pista - Título"
+
+#: src/settings.py:31
+msgid "Artist / Album / Track. Title"
+msgstr "Artista / Álbum / Pista. Título"
+
+#: src/settings.py:37
+msgid "Artist / Album / Title"
+msgstr "Artista / Álbum / Título"
+
+#: src/settings.py:43
+msgid "Artist - Album / Track - Artist - Title"
+msgstr "Artista - Álbum / Pista - Artista - Título"
+
+#: src/settings.py:49
+msgid "Artist / Album / Track - Title - Artist"
+msgstr "Artista / Álbum / Pista - Título - Artista"
+
+#: src/settings.py:55
+msgid "Album / Track - Title"
+msgstr "Álbum / Pista - Título"
+
+#: src/settings.py:61
+msgid "Album / Track - Artist - Title"
+msgstr "Álbum / Pista - Artista - Título"
+
+#: src/settings.py:67
+msgid "Artist / Track - Title"
+msgstr "Artista / Pista - Título"
+
+#: src/window.py:33 src/window.py:57 src/ui/about.py:16
+msgid "Dedisc"
+msgstr "Dedisc"
+
+#: src/window.py:61
+msgid "Eject Disc"
+msgstr "Expulsar el disco"
+
+#: src/window.py:68
+msgid "Main Menu"
+msgstr "Menú principal"
+
+#: src/window.py:85
+msgid "Scanning…"
+msgstr "Analizando…"
+
+#: src/window.py:118
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#: src/window.py:120
+msgid "Select none"
+msgstr "Deseleccionar todo"
+
+#: src/window.py:125
+msgid "Rip selected"
+msgstr "Extraer la selección"
+
+#: src/window.py:141 src/window.py:410
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/window.py:143
+msgid "Abort ripping"
+msgstr "Interrumpir la extracción"
+
+#: src/window.py:175 src/ui/preferences.py:41
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: src/window.py:176
+msgid "About"
+msgstr "Acerca de"
+
+#: src/window.py:177
+msgid "Homepage"
+msgstr "Página web"
+
+#: src/window.py:225 src/window.py:227
+msgid "Preparing…"
+msgstr "Preparando…"
+
+#: src/window.py:266
+msgid "Ripping process exited unexpectedly"
+msgstr "El proceso de extracción terminó inesperadamente"
+
+#: src/window.py:290
+msgid "Ripping cancelled"
+msgstr "Extracción cancelada"
+
+#: src/window.py:290
+msgid "Ripping was cancelled."
+msgstr "La extracción se ha cancelado."
+
+#: src/window.py:295
+msgid "OK"
+msgstr "Aceptar"
+
+#: src/window.py:319
+#, python-brace-format
+msgid "Overall: {percent}%"
+msgstr "Total: {percent}%"
+
+#: src/window.py:324
+#, python-brace-format
+msgid "Track {number}: {percent}%"
+msgstr "Pista {number}: {percent}%"
+
+#: src/window.py:332 src/window.py:446
+msgid "Ripping finished"
+msgstr "Extracción terminada"
+
+#: src/window.py:335
+#, python-brace-format
+msgid "Ripping track {number}…"
+msgstr "Extrayendo la pista {number}…"
+
+#: src/window.py:347
+#, python-brace-format
+msgid "ETA {time}"
+msgstr "Tiempo restante: {time}"
+
+#: src/window.py:358
+msgid "Cancelling…"
+msgstr "Cancelando…"
+
+#: src/window.py:390
+#, python-brace-format
+msgid "{} MB/s (×{:.1f})"
+msgstr "{} MB/s (×{:.1f})"
+
+#: src/window.py:405
+msgid "File already exists"
+msgstr "El archivo ya existe"
+
+#: src/window.py:406
+#, python-brace-format
+msgid "The file \"{path}\" already exists. What should be done?"
+msgstr "El archivo «{path}» ya existe. ¿Qué se debe hacer?"
+
+#: src/window.py:408
+msgid "Overwrite"
+msgstr "Sobrescribir"
+
+#: src/window.py:409
+msgid "Skip"
+msgstr "Omitir"
+
+#: src/window.py:443
+msgid "Ripping failed"
+msgstr "Falló la extracción"
+
+#: src/window.py:447
+msgid "All tracks ripped successfully."
+msgstr "Todas las pistas se han extraído correctamente."
+
+#: src/window.py:566 src/ui/status_page.py:18
+msgid "Insert an audio CD to scan"
+msgstr "Inserte un CD de audio para analizarlo"
+
+#: src/ui/about.py:23
+msgid "An offline CD scanner and ripper for GNOME"
+msgstr "Un analizador y extractor de CD sin conexión para GNOME"
+
+#: src/ui/about.py:24
+msgid "Website"
+msgstr "Página web"
+
+#: src/ui/preferences.py:16
+msgid "Artist"
+msgstr "Artista"
+
+#: src/ui/preferences.py:17
+msgid "Album"
+msgstr "Álbum"
+
+#: src/ui/preferences.py:18 src/ui/track_list.py:103
+msgid "Title"
+msgstr "Título"
+
+#: src/ui/preferences.py:49
+msgid "General"
+msgstr "General"
+
+#: src/ui/preferences.py:52
+msgid "CD Drive"
+msgstr "Unidad de CD"
+
+#: src/ui/preferences.py:53
+msgid "Choose which drive to use when several are connected"
+msgstr ""
+"Elija qué unidad usar cuando haya varias conectadas"
+
+#: src/ui/preferences.py:56
+msgid "Drive"
+msgstr "Unidad"
+
+#: src/ui/preferences.py:57
+msgid "Select a CD drive"
+msgstr "Seleccione una unidad de CD"
+
+#: src/ui/preferences.py:63
+msgid "Ripping"
+msgstr "Extracción"
+
+#: src/ui/preferences.py:64
+msgid "Where ripped tracks are saved"
+msgstr "Ubicación donde se guardan las pistas extraídas"
+
+#: src/ui/preferences.py:67
+msgid "Output Folder"
+msgstr "Carpeta de destino"
+
+#: src/ui/preferences.py:69
+msgid "Choose…"
+msgstr "Elegir…"
+
+#: src/ui/preferences.py:76
+msgid "Eject disc when ripping finishes"
+msgstr "Expulsar el disco al terminar la extracción"
+
+#: src/ui/preferences.py:77
+msgid "Open the tray automatically after all tracks are saved"
+msgstr ""
+"Abrir la bandeja automáticamente cuando se guarden todas las pistas"
+
+#: src/ui/preferences.py:84
+msgid "File Naming"
+msgstr "Nomenclatura de archivos"
+
+#: src/ui/preferences.py:85
+msgid "Folder and file name pattern"
+msgstr "Patrón de carpetas y nombres de archivo"
+
+#: src/ui/preferences.py:117
+msgid "Output Format"
+msgstr "Formato de salida"
+
+#: src/ui/preferences.py:118
+msgid "File format used when ripping tracks"
+msgstr "Formato de archivo usado al extraer pistas"
+
+#: src/ui/preferences.py:209
+msgid "Choose Output Folder"
+msgstr "Elegir carpeta de destino"
+
+#: src/ui/status_page.py:10
+msgid "No drive detected"
+msgstr "No se ha detectado ninguna unidad"
+
+#: src/ui/status_page.py:11
+msgid "Check that a CD drive is connected"
+msgstr "Compruebe que hay una unidad de CD conectada"
+
+#: src/ui/status_page.py:17
+msgid "No CD inserted"
+msgstr "No hay ningún CD insertado"
+
+#: src/ui/track_list.py:89
+msgid "Select"
+msgstr "Selección"
+
+#: src/ui/track_list.py:96
+msgid "Track"
+msgstr "Pista"
+
+#: src/ui/track_list.py:110
+msgid "Duration"
+msgstr "Duración"
