@@ -47,12 +47,6 @@ ninja -C build
 meson install -C build            # installs to prefix, incl. .mo translations
 ```
 
-Run from source without install:
-
-```bash
-PYTHONPATH=. python3 src/main.py
-```
-
 ## Usage
 
 1. Insert an audio CD.

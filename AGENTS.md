@@ -30,8 +30,8 @@ make install      # install to ~/.local/share/Dedisc + launcher/desktop entry
 make run          # dev: local venv, install deps, run from source
 make uninstall    # remove installed files and venv
 
-# Run from source (dev, no build needed)
-PYTHONPATH=. python3 src/main.py
+# (dev run requires the venv from `make run`; do NOT run `python3 src/main.py`
+#  directly — the deps are not in the system Python)
 
 # i18n — extract new strings
 xgettext --from-code=UTF-8 --language=Python \
