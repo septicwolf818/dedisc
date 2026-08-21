@@ -65,13 +65,19 @@ xgettext --from-code=UTF-8 --language=Python \
   --output=po/dedisc.pot src/*.py src/ui/*.py
 ```
 
-Verify translations:
+Verify a translation (`<lang>` = language code, e.g. `pl`):
 
 ```bash
-msgfmt --check -o /dev/null po/pl.po
+msgfmt --check -o /dev/null po/<lang>.po
 ```
 
-The i18n module compiles `po/pl.po` → `po/pl/LC_MESSAGES/dedisc.mo` on demand when running from source.
+To add a new language, create `po/<lang>.po` from the template and add it to the `languages` list in `po/meson.build`:
+
+```bash
+msginit --locale=<lang> --input=po/dedisc.pot --output=po/<lang>.po
+```
+
+The i18n module compiles every `po/<lang>.po` → `po/<lang>/LC_MESSAGES/dedisc.mo` on demand when running from source, so translations are picked up automatically.
 
 ## Contributing
 

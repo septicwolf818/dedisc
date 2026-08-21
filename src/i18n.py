@@ -15,24 +15,28 @@ def _project_po_dir() -> Path:
     return Path(__file__).resolve().parent.parent / 'po'
 
 def _compile_dev_translations():
-    """Compile po/pl.po -> po/pl/LC_MESSAGES/dedisc.mo for source runs."""
+    """Compile po/<lang>.po -> po/<lang>/LC_MESSAGES/dedisc.mo for source runs."""
     po_dir = _project_po_dir()
-    po_file = po_dir / 'pl.po'
-    if not po_file.is_file():
-        return None
-    mo_dir = po_dir / 'pl' / 'LC_MESSAGES'
-    mo_file = mo_dir / f'{DOMAIN}.mo'
-    if mo_file.is_file() and mo_file.stat().st_mtime >= po_file.stat().st_mtime:
-        return po_dir
-    mo_dir.mkdir(parents=True, exist_ok=True)
-    try:
-        subprocess.run(
-            ['msgfmt', '--check', '-o', str(mo_file), str(po_file)],
-            check=True, capture_output=True,
-        )
-        return po_dir
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
+    compiled = False
+    for po_file in sorted(po_dir.glob('*.po')):
+        lang = po_file.stem
+        mo_dir = po_dir / lang / 'LC_MESSAGES'
+        mo_file = mo_dir / f'{DOMAIN}.mo'
+        if mo_file.is_file() and mo_file.stat().st_mtime >= po_file.stat().st_mtime:
+            compiled = True
+            continue
+        mo_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            subprocess.run(
+                ['msgfmt', '--check', '-o', str(mo_file), str(po_file)],
+                check=True, capture_output=True,
+            )
+            compiled = True
+        except FileNotFoundError:
+            break
+        except subprocess.CalledProcessError:
+            continue
+    return po_dir if compiled else None
 
 def _setup_translations():
     """Install translations so all code uses _('string') uniformly."""
@@ -43,8 +47,7 @@ def _setup_translations():
 
     if locale_dir is None:
         for d in _LOCALE_DIRS:
-            test = d / 'pl' / 'LC_MESSAGES' / f'{DOMAIN}.mo'
-            if test.is_file():
+            if list(d.glob(f'*/LC_MESSAGES/{DOMAIN}.mo')):
                 locale_dir = str(d)
                 break
 

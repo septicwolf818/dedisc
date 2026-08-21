@@ -66,8 +66,12 @@ install: check-python
 	@cp -a requirements.txt "$(INSTALL_DIR)/"
 	@cp -a pycdio-py314.patch "$(INSTALL_DIR)/"
 	$(call step,Compiling and installing translations)
-	@mkdir -p "$(INSTALL_DIR)/locale/pl/LC_MESSAGES"
-	@msgfmt -o "$(INSTALL_DIR)/locale/pl/LC_MESSAGES/dedisc.mo" "$(SRC_DIR)/po/pl.po" 2>/dev/null || true
+	@for po in "$(SRC_DIR)"/po/*.po; do \
+		[ -e "$$po" ] || continue; \
+		lang="$${po##*/}"; lang="$${lang%.po}"; \
+		mkdir -p "$(INSTALL_DIR)/locale/$$lang/LC_MESSAGES"; \
+		msgfmt -o "$(INSTALL_DIR)/locale/$$lang/LC_MESSAGES/dedisc.mo" "$$po" 2>/dev/null || true; \
+	done
 	$(call step,Creating virtual environment)
 	@if [ ! -d "$(VENV_DIR)" ]; then $(PYTHON_BIN) -m venv "$(VENV_DIR)"; fi
 	$(call step,Upgrading pip, wheel and setuptools)
