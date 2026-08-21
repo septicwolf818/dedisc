@@ -18,7 +18,7 @@ App id: `pl.septicwolf818.Dedisc` (reverse domain of septicwolf818.pl).
 | Disc ID | `discid` (PyPI) — optional library for future use |
 | i18n | GNU gettext (`po/pl.po`, all UI strings) |
 
-**System deps:** `gtk4`, `libadwaita`, `python-pycairo`, `libcdio`, `libdiscid`, `udisks2` (Arch: `pacman -S gtk4 libadwaita python-pycairo libcdio libdiscid udisks2`).
+**System deps:** `gtk4`, `libadwaita`, `python-gobject`, `libcdio`, `libdiscid`, `udisks2`, `swig` (Arch: `pacman -S gtk4 libadwaita libcdio libdiscid udisks2 python-gobject swig`). `python-gobject` provides the `gi` module (`python-pycairo` alone is not enough); `swig` is required to build `pycdio` from source. MP3 uses `lameenc` (pip, bundles its own LAME) so needs no extra system package.
 
 **PyPI deps:** `pycdio`, `discid`, `numpy`, `soundfile`.
 
@@ -78,8 +78,8 @@ Data flow: UDisks2 DBus signal → `CDManager` → `GLib.idle_add(event)` → wi
 python3 -c "
 import gi; gi.require_version('Gtk','4.0')
 from gi.repository import Gtk, Adw
-import pycdio, discid, numpy, soundfile
-print(f'GTK {Gtk.MAJOR_VERSION}.{Gtk.MINOR_VERSION}  Adwaita {Adw.MAJOR_VERSION}.{Adw.MINOR_VERSION}  ✅')
+import pycdio, discid, numpy, soundfile, lameenc
+print(f'GTK {Gtk.MAJOR_VERSION}.{Gtk.MINOR_VERSION}  Adwaita {Adw.MAJOR_VERSION}.{Adw.MINOR_VERSION}  MP3(lameenc)  ✅')
 "
 ```
 
