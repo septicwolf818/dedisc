@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 from src.i18n import _
 from src.cd_manager import CDManager, DriveEvent, CDInfo
 from src.cd_reader import CDReader, AlbumInfo
+from src.cd_ripper import ConflictAction, run_rip, build_destination_path
 from src.ui.track_list import TrackList
 
 class WindowState(IntEnum):
@@ -187,7 +188,6 @@ class RipperWindow(Adw.ApplicationWindow):
         if not tracks:
             return
         from src.settings import Settings
-        from src.cd_ripper import ConflictAction, run_rip, build_destination_path
         settings = Settings()
         album = AlbumInfo(
             artist=self.artist_label.get_text() or None,
