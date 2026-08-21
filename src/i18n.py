@@ -1,15 +1,13 @@
 import gettext
 import subprocess
 from pathlib import Path
-import gi
-from gi.repository import GLib
 
 APP_ID = 'pl.septicwolf818.Dedisc'
 DOMAIN = 'dedisc'
 
 _LOCALE_DIRS = [
     Path(__file__).resolve().parent.parent / 'locale',
-    Path(GLib.get_user_data_dir()) / 'locale',
+    Path.home() / '.local' / 'share' / 'locale',
     Path('/usr/share/locale'),
 ]
 

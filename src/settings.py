@@ -3,9 +3,6 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
-import gi
-gi.require_version('Gtk','4.0')
-gi.require_version('Adw','1')
 
 from src.i18n import _
 

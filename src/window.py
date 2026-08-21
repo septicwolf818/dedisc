@@ -5,6 +5,8 @@ gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw, GLib, Gio
 from threading import Thread
+import multiprocessing
+import queue
 
 if TYPE_CHECKING:
     from src.cd_ripper import CDRipper
@@ -32,8 +34,13 @@ class RipperWindow(Adw.ApplicationWindow):
         self._current_cd_info = None
         self._current_album: Optional[AlbumInfo] = None
         self._requested_device = device
-        self._active_ripper: Optional["CDRipper"] = None
         self._rip_start_time = None
+        self._pending_rip = None
+        self._rip_process = None
+        self._rip_queue = None
+        self._rip_cancel = None
+        self._rip_timer = None
+        self._rip_finished = False
 
         self.stack = Gtk.Stack()
 
@@ -179,18 +186,52 @@ class RipperWindow(Adw.ApplicationWindow):
         tracks = self.track_list.get_selected_tracks()
         if not tracks:
             return
+        from src.settings import Settings
+        from src.cd_ripper import ConflictAction, run_rip, build_destination_path
+        settings = Settings()
         album = AlbumInfo(
             artist=self.artist_label.get_text() or None,
             album_title=self.album_title_label.get_text() or None,
             disc_title=None,
             tracks=tracks,
         )
-        from src.settings import Settings
-        from src.cd_ripper import CDRipper, ConflictCallback
-        settings = Settings()
-        ripper = CDRipper(settings, album, tracks)
         self._rip_settings = settings
-        self._active_ripper = ripper
+        device_path = self._current_cd_info.device_path
+
+        scheme = settings.get_naming_scheme()
+        extension = settings.get_output_extension()
+        conflicting = []
+        for t in tracks:
+            p = build_destination_path(
+                settings.output_dir, scheme, extension,
+                album.artist, album.album_title or album.disc_title,
+                t.track_number, t.title)
+            if p.exists():
+                conflicting.append(p)
+
+        if conflicting:
+            self._pending_rip = (device_path, settings, album, tracks)
+            self._on_rip_conflict(conflicting[0], self._rip_conflict_resolved)
+        else:
+            self._start_rip_process(
+                device_path, settings, album, tracks, ConflictAction.OVERWRITE)
+
+    def _rip_conflict_resolved(self, action):
+        pending = getattr(self, '_pending_rip', None)
+        self._pending_rip = None
+        if pending is None:
+            return
+        device_path, settings, album, tracks = pending
+        if action == ConflictAction.CANCEL:
+            self.rip_progress_box.set_visible(False)
+            self.abort_button.set_visible(False)
+            self.rip_button.set_sensitive(True)
+            self.select_all_button.set_sensitive(True)
+            self.select_none_button.set_sensitive(True)
+            return
+        self._start_rip_process(device_path, settings, album, tracks, action)
+
+    def _start_rip_process(self, device_path, settings, album, tracks, conflict_action):
         self.rip_button.set_sensitive(False)
         self.select_all_button.set_sensitive(False)
         self.select_none_button.set_sensitive(False)
@@ -201,22 +242,61 @@ class RipperWindow(Adw.ApplicationWindow):
         self.rip_progress_bar.set_text(_("Preparing…"))
         self._rip_start_time = None
         self._rip_last_overall = 0
+        self._rip_finished = False
 
-        conflict_cb = ConflictCallback(self, self._on_rip_conflict)
-        device_path = self._current_cd_info.device_path
+        ctx = multiprocessing.get_context('spawn')
+        q = ctx.Queue()
+        cancel = ctx.Event()
+        p = ctx.Process(target=run_rip,
+                        args=(q, cancel, device_path, settings, album, tracks, conflict_action))
+        p.start()
+        self._rip_process = p
+        self._rip_queue = q
+        self._rip_cancel = cancel
+        self._rip_timer = GLib.timeout_add(40, self._poll_rip_queue)
 
-        def work():
+    def _poll_rip_queue(self):
+        q = self._rip_queue
+        while True:
             try:
-                ripper.rip(device_path,
-                           lambda p: GLib.idle_add(self._on_rip_progress, p),
-                           conflict_cb)
-                GLib.idle_add(self._on_rip_done, None, None)
-            except Exception as e:
-                GLib.idle_add(self._on_rip_done, str(e), None)
+                kind, payload = q.get_nowait()
+            except queue.Empty:
+                break
+            self._handle_rip_message(kind, payload)
+        if self._rip_finished:
+            return False
+        if not self._rip_process.is_alive():
+            try:
+                kind, payload = q.get_nowait()
+            except queue.Empty:
+                self._finish_rip(_("Ripping process exited unexpectedly"))
+                return False
+            self._handle_rip_message(kind, payload)
+            if self._rip_finished:
+                return False
+        return True
 
-        thread = Thread(target=work, name="cd-rip")
-        thread.daemon = True
-        thread.start()
+    def _handle_rip_message(self, kind, payload):
+        if kind == 'progress':
+            self._on_rip_progress(payload)
+        elif kind == 'done':
+            self._rip_finished = True
+            self._finish_rip(None)
+        elif kind == 'error':
+            self._rip_finished = True
+            self._finish_rip(payload)
+
+    def _finish_rip(self, error_message):
+        if self._rip_timer:
+            GLib.source_remove(self._rip_timer)
+            self._rip_timer = None
+        if self._rip_process is not None:
+            self._rip_process.join(timeout=3)
+            self._rip_process = None
+        self._rip_queue = None
+        self._rip_cancel = None
+        self._rip_finished = False
+        self._on_rip_done(error_message, None)
 
     def _on_rip_progress(self, progress):
         if progress.overall_total > 0:
@@ -242,9 +322,8 @@ class RipperWindow(Adw.ApplicationWindow):
         return False
 
     def _on_abort_clicked(self, button):
-        ripper = self._active_ripper
-        if ripper is not None:
-            ripper.cancel()
+        if self._rip_cancel is not None:
+            self._rip_cancel.set()
         self.abort_button.set_sensitive(False)
         self.rip_progress_label.set_text(_("Cancelling…"))
 
@@ -294,7 +373,6 @@ class RipperWindow(Adw.ApplicationWindow):
         self.select_none_button.set_sensitive(True)
         self.abort_button.set_visible(False)
         self.rip_progress_box.set_visible(False)
-        self._active_ripper = None
         if not error_message and getattr(self, '_rip_settings', None) is not None \
                 and self._rip_settings.eject_when_done \
                 and self._cd_manager is not None and self._current_cd_info is not None:

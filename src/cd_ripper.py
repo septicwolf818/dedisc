@@ -5,12 +5,7 @@ import threading
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Callable, Optional
-
-import gi
-gi.require_version('Gtk','4.0')
-gi.require_version('Adw','1')
-from gi.repository import GLib
+from typing import Callable, Optional, Protocol
 
 try:
     import cdio
@@ -54,6 +49,11 @@ class ConflictAction(Enum):
     SKIP = 'skip'
     CANCEL = 'cancel'
 
+
+class _ConflictResolver(Protocol):
+    def ask(self, file_path: str) -> ConflictAction:
+        ...
+
 class ConflictCallback:
     """Bridge a worker-thread file-exists question to the main loop dialog."""
     def __init__(self, window, on_decision):
@@ -63,6 +63,7 @@ class ConflictCallback:
         self._event = threading.Event()
 
     def ask(self, file_path: str) -> ConflictAction:
+        from gi.repository import GLib
         self._result = None
         self._event.clear()
         GLib.idle_add(self._show, file_path)
@@ -76,6 +77,33 @@ class ConflictCallback:
     def _resolve(self, action: ConflictAction):
         self._result = action
         self._event.set()
+
+
+import multiprocessing
+
+
+def run_rip(queue, cancel_event, device_path, settings, album, tracks, conflict_action):
+    """Subprocess entry point for ripping.
+
+    Runs the whole rip outside the GTK process so the GIL held by pycdio's
+    CD reads and lameenc/soundfile encoding never blocks the UI thread.
+    Progress and completion are reported back over `queue`.
+    """
+    try:
+        rip = CDRipper(settings, album, tracks)
+        rip._cancelled = cancel_event
+
+        class _NoConflict:
+            def ask(self, file_path):
+                return conflict_action
+
+        def on_progress(p):
+            queue.put(('progress', p))
+
+        rip.rip(device_path, on_progress, _NoConflict())
+        queue.put(('done', None))
+    except Exception as e:
+        queue.put(('error', str(e)))
 
 
 def build_destination_path(output_dir, scheme: NamingScheme, extension: str,
@@ -112,7 +140,7 @@ class CDRipper:
         self._cancelled.set()
 
     def rip(self, device_path: str, on_progress: Callable[[RipProgress], None],
-            conflict_cb: ConflictCallback):
+            conflict_cb: _ConflictResolver):
         """Rip selected tracks. Runs in a worker thread."""
         if cdio is None:
             raise RuntimeError(_("pycdio not installed"))
