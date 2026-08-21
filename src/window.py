@@ -36,12 +36,13 @@ class RipperWindow(Adw.ApplicationWindow):
         self._current_album: Optional[AlbumInfo] = None
         self._requested_device = device
         self._rip_start_time = None
-        self._pending_rip = None
         self._rip_process = None
         self._rip_queue = None
+        self._rip_response_q = None
         self._rip_cancel = None
         self._rip_timer = None
         self._rip_finished = False
+        self._conflict_dialog = None
 
         self.stack = Gtk.Stack()
 
@@ -203,41 +204,9 @@ class RipperWindow(Adw.ApplicationWindow):
         )
         self._rip_settings = settings
         device_path = self._current_cd_info.device_path
+        self._start_rip_process(device_path, settings, album, tracks)
 
-        scheme = settings.get_naming_scheme()
-        extension = settings.get_output_extension()
-        conflicting = []
-        for t in tracks:
-            p = build_destination_path(
-                settings.output_dir, scheme, extension,
-                album.artist, album.album_title or album.disc_title,
-                t.track_number, t.title)
-            if p.exists():
-                conflicting.append(p)
-
-        if conflicting:
-            self._pending_rip = (device_path, settings, album, tracks)
-            self._on_rip_conflict(conflicting[0], self._rip_conflict_resolved)
-        else:
-            self._start_rip_process(
-                device_path, settings, album, tracks, ConflictAction.OVERWRITE)
-
-    def _rip_conflict_resolved(self, action):
-        pending = getattr(self, '_pending_rip', None)
-        self._pending_rip = None
-        if pending is None:
-            return
-        device_path, settings, album, tracks = pending
-        if action == ConflictAction.CANCEL:
-            self.rip_progress_box.set_visible(False)
-            self.abort_button.set_visible(False)
-            self.rip_button.set_sensitive(True)
-            self.select_all_button.set_sensitive(True)
-            self.select_none_button.set_sensitive(True)
-            return
-        self._start_rip_process(device_path, settings, album, tracks, action)
-
-    def _start_rip_process(self, device_path, settings, album, tracks, conflict_action):
+    def _start_rip_process(self, device_path, settings, album, tracks):
         self.rip_button.set_sensitive(False)
         self.select_all_button.set_sensitive(False)
         self.select_none_button.set_sensitive(False)
@@ -254,16 +223,20 @@ class RipperWindow(Adw.ApplicationWindow):
 
         ctx = multiprocessing.get_context('spawn')
         q = ctx.Queue()
+        response_q = ctx.Queue()
         cancel = ctx.Event()
         p = ctx.Process(target=run_rip,
-                        args=(q, cancel, device_path, settings, album, tracks, conflict_action))
+                        args=(q, response_q, cancel, device_path, settings, album, tracks))
         p.start()
         self._rip_process = p
         self._rip_queue = q
+        self._rip_response_q = response_q
         self._rip_cancel = cancel
         self._rip_timer = GLib.timeout_add(40, self._poll_rip_queue)
 
     def _poll_rip_queue(self):
+        if self._rip_process is None or self._rip_queue is None:
+            return False
         q = self._rip_queue
         while True:
             try:
@@ -271,8 +244,8 @@ class RipperWindow(Adw.ApplicationWindow):
             except queue.Empty:
                 break
             self._handle_rip_message(kind, payload)
-        if self._rip_finished:
-            return False
+            if self._rip_finished:
+                return False
         if not self._rip_process.is_alive():
             try:
                 kind, payload = q.get_nowait()
@@ -287,6 +260,8 @@ class RipperWindow(Adw.ApplicationWindow):
     def _handle_rip_message(self, kind, payload):
         if kind == 'progress':
             self._on_rip_progress(payload)
+        elif kind == 'conflict':
+            self._on_rip_conflict(payload, self._rip_response_q.put)
         elif kind == 'done':
             self._rip_finished = True
             self._finish_rip(None)
@@ -344,13 +319,16 @@ class RipperWindow(Adw.ApplicationWindow):
         return False
 
     def _on_abort_clicked(self, button):
+        if getattr(self, '_conflict_dialog', None) is not None:
+            self._conflict_dialog.response('cancel')
         if self._rip_cancel is not None:
             self._rip_cancel.set()
         self.abort_button.set_sensitive(False)
         self.rip_progress_label.set_text(_("Cancelling…"))
 
-    def _on_close_request(self, *args):
-        # Don't leave the rip subprocess orphaned when the window is closed.
+    def _cancel_rip_process(self):
+        # Terminate the rip subprocess if it is still running so it does not
+        # keep the drive busy (and the disc spinning) after the window closes.
         if self._rip_process is not None and self._rip_process.is_alive():
             if self._rip_cancel is not None:
                 self._rip_cancel.set()
@@ -361,10 +339,14 @@ class RipperWindow(Adw.ApplicationWindow):
                 self._rip_process.join(timeout=3)
         self._rip_process = None
         self._rip_queue = None
+        self._rip_response_q = None
         self._rip_cancel = None
         if self._rip_timer:
             GLib.source_remove(self._rip_timer)
             self._rip_timer = None
+
+    def _on_close_request(self, *args):
+        self._cancel_rip_process()
         return False
 
     @staticmethod
@@ -393,6 +375,7 @@ class RipperWindow(Adw.ApplicationWindow):
         dialog.add_response("cancel", _("Cancel"))
         dialog.set_default_response("skip")
         dialog.set_close_response("cancel")
+        self._conflict_dialog = dialog
         dialog.connect('response', self._on_rip_conflict_response, resolve)
         dialog.present()
 
@@ -404,6 +387,8 @@ class RipperWindow(Adw.ApplicationWindow):
             'cancel': ConflictAction.CANCEL,
         }
         action = mapping.get(response, ConflictAction.SKIP)
+        if self._conflict_dialog is dialog:
+            self._conflict_dialog = None
         dialog.close()
         resolve(action)
 

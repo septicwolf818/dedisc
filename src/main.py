@@ -1,3 +1,4 @@
+import signal
 import sys
 import gi
 gi.require_version('Gtk','4.0')
@@ -13,6 +14,29 @@ class RipperApp(Adw.Application):
     def __init__(self):
         super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_OPEN)
         self.connect('open', self._on_open)
+        self.connect('shutdown', self._on_shutdown)
+        self._install_signal_handlers()
+
+    def _install_signal_handlers(self):
+        # Ensure the rip subprocess is reaped if the app process is killed by
+        # a terminal close (SIGHUP) or Ctrl+C (SIGINT), so the disc does not
+        # keep spinning in an orphaned child.
+        for sig in (signal.SIGINT, signal.SIGHUP):
+            try:
+                signal.signal(sig, self._on_signal)
+            except (ValueError, OSError, AttributeError):
+                pass
+
+    def _on_signal(self, signum, frame):
+        win = self.get_active_window()
+        if win is not None and hasattr(win, '_cancel_rip_process'):
+            win._cancel_rip_process()
+        self.quit()
+
+    def _on_shutdown(self, *args):
+        win = self.get_active_window()
+        if win is not None and hasattr(win, '_cancel_rip_process'):
+            win._cancel_rip_process()
 
     def do_startup(self):
         Adw.Application.do_startup(self)

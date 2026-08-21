@@ -82,25 +82,29 @@ class ConflictCallback:
 import multiprocessing
 
 
-def run_rip(queue, cancel_event, device_path, settings, album, tracks, conflict_action):
+def run_rip(queue, response_queue, cancel_event, device_path, settings, album, tracks):
     """Subprocess entry point for ripping.
 
     Runs the whole rip outside the GTK process so the GIL held by pycdio's
     CD reads and lameenc/soundfile encoding never blocks the UI thread.
-    Progress and completion are reported back over `queue`.
+    Progress and completion are reported back over `queue`; per-file
+    overwrite conflicts are forwarded to the main thread by putting a
+    ``('conflict', path)`` message and blocking on ``response_queue`` for
+    the chosen ``ConflictAction``.
     """
     try:
         rip = CDRipper(settings, album, tracks)
         rip._cancelled = cancel_event
 
-        class _NoConflict:
+        class _ConflictBridge:
             def ask(self, file_path):
-                return conflict_action
+                queue.put(('conflict', file_path))
+                return response_queue.get()
 
         def on_progress(p):
             queue.put(('progress', p))
 
-        rip.rip(device_path, on_progress, _NoConflict())
+        rip.rip(device_path, on_progress, _ConflictBridge())
         queue.put(('done', None))
     except Exception as e:
         queue.put(('error', str(e)))
