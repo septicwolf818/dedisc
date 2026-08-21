@@ -304,3 +304,12 @@ msgstr "Titelnr."
 #: src/ui/track_list.py:110
 msgid "Duration"
 msgstr "Dauer"
+
+#. Desktop entry strings - NOT extracted by xgettext; see po/dedisc.pot.
+#: data/dedisc.desktop.in
+msgid "Compact Disc Ripper"
+msgstr "CD-Ausleseprogramm"
+
+#: data/dedisc.desktop.in
+msgid "Rip and scan audio CDs on Linux"
+msgstr "Audio-CDs unter Linux auslesen und analysieren"

@@ -1,0 +1,9 @@
+# Languages available for translation merging (must match po/meson.build).
+cs
+de
+es
+fr
+it
+pl
+pt_BR
+uk

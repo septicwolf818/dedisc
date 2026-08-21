@@ -303,3 +303,13 @@ msgstr "Ścieżka"
 #: src/ui/track_list.py:110
 msgid "Duration"
 msgstr "Czas trwania"
+
+#. Desktop entry strings - NOT extracted by xgettext; maintain manually.
+#. Merged into data/dedisc.desktop.in by "msgfmt --desktop" at install time.
+#: data/dedisc.desktop.in
+msgid "Compact Disc Ripper"
+msgstr "Program do zgrywania płyt CD"
+
+#: data/dedisc.desktop.in
+msgid "Rip and scan audio CDs on Linux"
+msgstr "Zgrywanie i analizowanie płyt audio CD w systemie Linux"

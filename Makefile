@@ -5,6 +5,7 @@
 #                     install deps, run the app from source
 #   make install    – install into user space, create launcher + desktop entry + icon
 #   make uninstall  – remove installed user files and venv
+#   make update-po  – extract UI strings and sync desktop-entry translations
 #   make clean      – remove local venv and __pycache__
 
 PYTHON_BIN := python3.14
@@ -30,7 +31,7 @@ RESET  := \033[0m
 step = @printf '$(CYAN)==>$(RESET) $(BOLD)%s$(RESET)\n' "$(1)"
 ok   = @printf '$(GREEN)✓ %s$(RESET)\n' "$(1)"
 
-.PHONY: all run install uninstall clean check-python
+.PHONY: all run install uninstall clean check-python update-po
 
 all: run
 
@@ -65,6 +66,8 @@ install: check-python
 	@cp -a data "$(INSTALL_DIR)/" 2>/dev/null || true
 	@cp -a requirements.txt "$(INSTALL_DIR)/"
 	@cp -a pycdio-py314.patch "$(INSTALL_DIR)/"
+	$(call step,Syncing desktop entry translations)
+	@$(PYTHON_BIN) tools/sync_desktop_po.py >/dev/null
 	$(call step,Compiling and installing translations)
 	@for po in "$(SRC_DIR)"/po/*.po; do \
 		[ -e "$$po" ] || continue; \
@@ -91,7 +94,16 @@ install: check-python
 	@chmod +x "$(BIN_DIR)/$(APP_NAME)"
 	$(call step,Writing desktop entry)
 	@sed -e 's|@APP_ID@|$(APP_ID)|g' -e 's|@BIN_PATH@|$(BIN_DIR)/$(APP_NAME)|g' \
-		"$(SRC_DIR)/data/dedisc.desktop.in" > "$(DESKTOP_DIR)/$(APP_ID).desktop"
+		"$(SRC_DIR)/data/dedisc.desktop.in" > "$(INSTALL_DIR)/dedisc.desktop.tmp"
+	@if command -v msgfmt >/dev/null 2>&1; then \
+		msgfmt --desktop -k -kGenericName -kComment \
+			--template="$(INSTALL_DIR)/dedisc.desktop.tmp" \
+			-d "$(SRC_DIR)/po" -o "$(DESKTOP_DIR)/$(APP_ID).desktop" 2>/dev/null \
+			|| cp "$(INSTALL_DIR)/dedisc.desktop.tmp" "$(DESKTOP_DIR)/$(APP_ID).desktop"; \
+	else \
+		cp "$(INSTALL_DIR)/dedisc.desktop.tmp" "$(DESKTOP_DIR)/$(APP_ID).desktop"; \
+	fi
+	@rm -f "$(INSTALL_DIR)/dedisc.desktop.tmp"
 	$(call step,Installing icon)
 	@cp "$(SRC_DIR)/data/pl.septicwolf818.Dedisc.svg" "$(ICON_DIR)/$(APP_ID).svg"
 	$(call step,Registering desktop database and icon cache)
@@ -119,3 +131,12 @@ clean:
 	$(call step,Removing __pycache__ directories)
 	@find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
 	$(call ok,Clean done.)
+
+update-po: check-python
+	$(call step,Extracting UI strings with xgettext)
+	@xgettext --from-code=UTF-8 --language=Python \
+		--keyword=_ --keyword=n_:1,2 \
+		--output=po/dedisc.pot src/*.py src/ui/*.py
+	$(call step,Syncing desktop entry translations)
+	@$(PYTHON_BIN) tools/sync_desktop_po.py >/dev/null
+	$(call ok,Translation catalogs updated.)

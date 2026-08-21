@@ -13,10 +13,18 @@ py = import('python').find_installation(pure: true)
 conf = configuration_data()
 conf.set('APP_ID', 'pl.septicwolf818.Dedisc')
 
-configure_file(
+configured_desktop = configure_file(
   input: 'data/dedisc.desktop.in',
-  output: 'pl.septicwolf818.Dedisc.desktop',
+  output: 'dedisc.desktop',
   configuration: conf,
+)
+
+i18n = import('i18n')
+i18n.merge_file(
+  input: configured_desktop,
+  output: 'pl.septicwolf818.Dedisc.desktop',
+  type: 'desktop',
+  po_dir: join_paths(meson.project_source_root(), 'po'),
   install: true,
   install_dir: join_paths(get_option('datadir'), 'applications')
 )

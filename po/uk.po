@@ -310,3 +310,12 @@ msgstr "Доріжка"
 #: src/ui/track_list.py:110
 msgid "Duration"
 msgstr "Тривалість"
+
+#. Desktop entry strings - NOT extracted by xgettext; see po/dedisc.pot.
+#: data/dedisc.desktop.in
+msgid "Compact Disc Ripper"
+msgstr "Засіб копіювання компакт-дисків"
+
+#: data/dedisc.desktop.in
+msgid "Rip and scan audio CDs on Linux"
+msgstr "Копіювання та аналізування аудіо-CD у Linux"
