@@ -9,7 +9,7 @@ An offline GTK4/libadwaita CD scanner and ripper for Linux. Detect optical drive
 - Album/track list with selectable tracks
 - Preferences: drive selection, output folder, naming schemes, output format
 - Live preview of destination path using the first track of the inserted disc
-- Ripping to WAV/FLAC/MP3 with on-the-fly encoding via `soundfile`
+- Ripping to WAV/FLAC/MP3 (WAV/FLAC via `soundfile`, MP3 via `lameenc`)
 - Conflict handling: overwrite / skip / cancel
 - Gettext i18n with on-demand `.mo` compilation for development
 
@@ -21,22 +21,30 @@ Arch Linux:
 pacman -S gtk4 libadwaita libcdio udisks2 python-gobject swig
 ```
 
-Python packages from Arch can be installed via pacman:
-- `python-pycdio` (requires `swig`)
-- `python-discid`
+`swig` is required to build `pycdio` from source. All Python
+dependencies (including a patched `pycdio` for Python 3.14 and `lameenc`
+for MP3) are installed automatically into a bundled venv by the Makefile
+below — no manual `pip install` needed.
 
-The rest (numpy, soundfile) are installed via pip. Runtime dependencies:
+## Install
+
+The provided Makefile does a copy-based install into your home directory
+(no root required) and sets up a launcher and desktop entry:
 
 ```bash
-pip install -r requirements.txt
+make install      # install to ~/.local/share/Dedisc + create launcher/desktop entry
+make run          # dev: create a local venv, install deps, run from source
+make uninstall    # remove the installed files and venv
 ```
 
-## Build & install
+### Alternative: meson packaging
+
+For a system-wide package install (e.g. distro packaging) use meson:
 
 ```bash
 meson setup build --prefix=/usr
 ninja -C build
-meson install -C build
+meson install -C build            # installs to prefix, incl. .mo translations
 ```
 
 Run from source without install:

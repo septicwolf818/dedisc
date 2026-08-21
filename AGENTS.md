@@ -12,7 +12,7 @@ App id: `pl.septicwolf818.Dedisc` (reverse domain of septicwolf818.pl).
 |---|---|
 | Language | Python 3.11+ |
 | GUI | GTK4 + libadwaita via `gi.repository` (PyGObject 3.56+) |
-| Build | Meson + ninja (`meson-python`) — **not** pure pip |
+| Build | Makefile (copy-based installer, no root); meson-python optional for system-wide packaging |
 | Drive discovery | PyGObject `Gio.DBusProxy` → UDisks2 D-Bus API |
 | CD metadata | `pycdio` (PyPI, wraps libcdio) for TOC + CD-Text |
 | Disc ID | `discid` (PyPI) — optional library for future use |
@@ -25,13 +25,10 @@ App id: `pl.septicwolf818.Dedisc` (reverse domain of septicwolf818.pl).
 ## Commands
 
 ```bash
-# Setup (one-time): runtime deps + build deps
-pip install -r requirements.txt -r requirements-build.txt
-
-# Build (meson is the only build tool)
-meson setup build --prefix=/usr
-ninja -C build
-meson install -C build            # installs to prefix, incl. .mo translations
+# Primary installer (copy-based, no root) — handles venv + patched pycdio + deps
+make install      # install to ~/.local/share/Dedisc + launcher/desktop entry
+make run          # dev: local venv, install deps, run from source
+make uninstall    # remove installed files and venv
 
 # Run from source (dev, no build needed)
 PYTHONPATH=. python3 src/main.py
@@ -45,7 +42,12 @@ xgettext --from-code=UTF-8 --language=Python \
 msgfmt --check -o /dev/null po/pl.po
 ```
 
-Meson is the only build tool. `requirements.txt` holds runtime deps, `requirements-build.txt` holds build deps — never mix them.
+The Makefile is the primary installer (copy-based install into the user's
+home, no root). `meson.build` + `pyproject.toml` provide an **optional**
+meson-python packaging path for system-wide/distro installs:
+`meson setup build --prefix=/usr && ninja -C build && meson install -C build`.
+`requirements.txt` holds runtime deps, `requirements-build.txt` holds build
+deps — never mix them.
 
 ## Critical constraints (agent gotchas)
 
