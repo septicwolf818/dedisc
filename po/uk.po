@@ -1,0 +1,312 @@
+# Ukrainian translation for Dedisc
+# Terminology aligned with official GNOME Ukrainian translations
+# (GTK, Sound Juicer, Brasero).
+msgid ""
+msgstr ""
+"Project-Id-Version: dedisc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 22:08+0200\n"
+"PO-Revision-Date: 2026-08-21 23:04+0200\n"
+"Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
+"Language-Team: Ukrainian\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/cd_ripper.py:124
+msgid "Unknown Artist"
+msgstr "Невідомий виконавець"
+
+#: src/cd_ripper.py:125
+msgid "Unknown Album"
+msgstr "Невідомий альбом"
+
+#: src/cd_ripper.py:126
+#, python-brace-format
+msgid "Track {number}"
+msgstr "Доріжка {number}"
+
+#: src/cd_ripper.py:162
+msgid "pycdio not installed"
+msgstr "pycdio не встановлено"
+
+#: src/cd_ripper.py:170
+msgid "Device is not an audio CD"
+msgstr "Пристрій не є аудіо-CD"
+
+#: src/settings.py:25
+msgid "Artist / Album / Track - Title"
+msgstr "Виконавець / Альбом / Доріжка - Назва"
+
+#: src/settings.py:31
+msgid "Artist / Album / Track. Title"
+msgstr "Виконавець / Альбом / Доріжка. Назва"
+
+#: src/settings.py:37
+msgid "Artist / Album / Title"
+msgstr "Виконавець / Альбом / Назва"
+
+#: src/settings.py:43
+msgid "Artist - Album / Track - Artist - Title"
+msgstr "Виконавець - Альбом / Доріжка - Виконавець - Назва"
+
+#: src/settings.py:49
+msgid "Artist / Album / Track - Title - Artist"
+msgstr "Виконавець / Альбом / Доріжка - Назва - Виконавець"
+
+#: src/settings.py:55
+msgid "Album / Track - Title"
+msgstr "Альбом / Доріжка - Назва"
+
+#: src/settings.py:61
+msgid "Album / Track - Artist - Title"
+msgstr "Альбом / Доріжка - Виконавець - Назва"
+
+#: src/settings.py:67
+msgid "Artist / Track - Title"
+msgstr "Виконавець / Доріжка - Назва"
+
+#: src/window.py:33 src/window.py:57 src/ui/about.py:16
+msgid "Dedisc"
+msgstr "Dedisc"
+
+#: src/window.py:61
+msgid "Eject Disc"
+msgstr "Виштовхнути диск"
+
+#: src/window.py:68
+msgid "Main Menu"
+msgstr "Головне меню"
+
+#: src/window.py:85
+msgid "Scanning…"
+msgstr "Аналізування…"
+
+#: src/window.py:118
+msgid "Select all"
+msgstr "Вибрати все"
+
+#: src/window.py:120
+msgid "Select none"
+msgstr "Зняти вибір"
+
+#: src/window.py:125
+msgid "Rip selected"
+msgstr "Копіювати позначені"
+
+#: src/window.py:141 src/window.py:410
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: src/window.py:143
+msgid "Abort ripping"
+msgstr "Перервати копіювання"
+
+#: src/window.py:175 src/ui/preferences.py:41
+msgid "Preferences"
+msgstr "Параметри"
+
+#: src/window.py:176
+msgid "About"
+msgstr "Про програму"
+
+#: src/window.py:177
+msgid "Homepage"
+msgstr "Сайт"
+
+#: src/window.py:225 src/window.py:227
+msgid "Preparing…"
+msgstr "Підготовка…"
+
+#: src/window.py:266
+msgid "Ripping process exited unexpectedly"
+msgstr "Процес копіювання несподівано завершився"
+
+#: src/window.py:290
+msgid "Ripping cancelled"
+msgstr "Копіювання скасовано"
+
+#: src/window.py:290
+msgid "Ripping was cancelled."
+msgstr "Процес копіювання було скасовано."
+
+#: src/window.py:295
+msgid "OK"
+msgstr "Гаразд"
+
+#: src/window.py:319
+#, python-brace-format
+msgid "Overall: {percent}%"
+msgstr "Загалом: {percent}%"
+
+#: src/window.py:324
+#, python-brace-format
+msgid "Track {number}: {percent}%"
+msgstr "Доріжка {number}: {percent}%"
+
+#: src/window.py:332 src/window.py:446
+msgid "Ripping finished"
+msgstr "Копіювання завершено"
+
+#: src/window.py:335
+#, python-brace-format
+msgid "Ripping track {number}…"
+msgstr "Копіювання доріжки {number}…"
+
+#: src/window.py:347
+#, python-brace-format
+msgid "ETA {time}"
+msgstr "Залишок часу: {time}"
+
+#: src/window.py:358
+msgid "Cancelling…"
+msgstr "Скасування…"
+
+#: src/window.py:390
+#, python-brace-format
+msgid "{} MB/s (×{:.1f})"
+msgstr "{} MB/s (×{:.1f})"
+
+#: src/window.py:405
+msgid "File already exists"
+msgstr "Файл вже існує"
+
+#: src/window.py:406
+#, python-brace-format
+msgid "The file \"{path}\" already exists. What should be done?"
+msgstr "Файл «{path}» вже існує. Що робити?"
+
+#: src/window.py:408
+msgid "Overwrite"
+msgstr "Перезаписати"
+
+#: src/window.py:409
+msgid "Skip"
+msgstr "Пропустити"
+
+#: src/window.py:443
+msgid "Ripping failed"
+msgstr "Помилка копіювання"
+
+#: src/window.py:447
+msgid "All tracks ripped successfully."
+msgstr "Усі доріжки успішно скопійовано."
+
+#: src/window.py:566 src/ui/status_page.py:18
+msgid "Insert an audio CD to scan"
+msgstr "Вставте аудіо-CD для аналізування"
+
+#: src/ui/about.py:23
+msgid "An offline CD scanner and ripper for GNOME"
+msgstr ""
+"Автономна програма для аналізування та копіювання компакт-дисків для GNOME"
+
+#: src/ui/about.py:24
+msgid "Website"
+msgstr "Сайт"
+
+#: src/ui/preferences.py:16
+msgid "Artist"
+msgstr "Виконавець"
+
+#: src/ui/preferences.py:17
+msgid "Album"
+msgstr "Альбом"
+
+#: src/ui/preferences.py:18 src/ui/track_list.py:103
+msgid "Title"
+msgstr "Назва"
+
+#: src/ui/preferences.py:49
+msgid "General"
+msgstr "Загальне"
+
+#: src/ui/preferences.py:52
+msgid "CD Drive"
+msgstr "Пристрій CD"
+
+#: src/ui/preferences.py:53
+msgid "Choose which drive to use when several are connected"
+msgstr ""
+"Виберіть, який пристрій використовувати, якщо підключено кілька"
+
+#: src/ui/preferences.py:56
+msgid "Drive"
+msgstr "Пристрій"
+
+#: src/ui/preferences.py:57
+msgid "Select a CD drive"
+msgstr "Виберіть пристрій CD"
+
+#: src/ui/preferences.py:63
+msgid "Ripping"
+msgstr "Копіювання"
+
+#: src/ui/preferences.py:64
+msgid "Where ripped tracks are saved"
+msgstr "Місце збереження скопійованих доріжок"
+
+#: src/ui/preferences.py:67
+msgid "Output Folder"
+msgstr "Тека призначення"
+
+#: src/ui/preferences.py:69
+msgid "Choose…"
+msgstr "Вибрати…"
+
+#: src/ui/preferences.py:76
+msgid "Eject disc when ripping finishes"
+msgstr "Виштовхувати диск після завершення копіювання"
+
+#: src/ui/preferences.py:77
+msgid "Open the tray automatically after all tracks are saved"
+msgstr ""
+"Автоматично відкривати лоток після збереження всіх доріжок"
+
+#: src/ui/preferences.py:84
+msgid "File Naming"
+msgstr "Назви файлів"
+
+#: src/ui/preferences.py:85
+msgid "Folder and file name pattern"
+msgstr "Шаблон тек і назв файлів"
+
+#: src/ui/preferences.py:117
+msgid "Output Format"
+msgstr "Формат виведення"
+
+#: src/ui/preferences.py:118
+msgid "File format used when ripping tracks"
+msgstr ""
+"Формат файлів, що використовується під час копіювання доріжок"
+
+#: src/ui/preferences.py:209
+msgid "Choose Output Folder"
+msgstr "Вибір теки призначення"
+
+#: src/ui/status_page.py:10
+msgid "No drive detected"
+msgstr "Не виявлено жодного пристрою"
+
+#: src/ui/status_page.py:11
+msgid "Check that a CD drive is connected"
+msgstr "Перевірте, чи підключено пристрій CD"
+
+#: src/ui/status_page.py:17
+msgid "No CD inserted"
+msgstr "Диск не вставлено"
+
+#: src/ui/track_list.py:89
+msgid "Select"
+msgstr "Вибір"
+
+#: src/ui/track_list.py:96
+msgid "Track"
+msgstr "Доріжка"
+
+#: src/ui/track_list.py:110
+msgid "Duration"
+msgstr "Тривалість"
