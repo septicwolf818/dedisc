@@ -1,10 +1,13 @@
 import json
+import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
 from src.i18n import _
+
+logger = logging.getLogger(__name__)
 
 DOMAIN = 'dedisc'
 APP_ID = 'pl.septicwolf818.Dedisc'
@@ -95,8 +98,10 @@ class Settings:
             self.output_format = data.get('output_format', self.output_format)
             self.selected_drive_obj_path = data.get('selected_drive_obj_path', '')
             self.eject_when_done = bool(data.get('eject_when_done', False))
-        except (OSError, ValueError):
-            pass
+            logger.info("Settings. load output_dir=%s naming_scheme_id=%s format=%s",
+                        self.output_dir, self.naming_scheme_id, self.output_format)
+        except (OSError, ValueError) as e:
+            logger.warning("Settings. load failed for %s: %s", self._config_file, e)
 
     def save(self):
         try:
@@ -108,8 +113,10 @@ class Settings:
                 'selected_drive_obj_path': self.selected_drive_obj_path,
                 'eject_when_done': self.eject_when_done,
             }, indent=2), encoding='utf-8')
-        except OSError:
-            pass
+            logger.info("Settings. save output_dir=%s naming_scheme_id=%s format=%s",
+                        self.output_dir, self.naming_scheme_id, self.output_format)
+        except OSError as e:
+            logger.error("Settings. save failed for %s: %s", self._config_file, e)
 
     def get_naming_scheme(self) -> NamingScheme:
         for scheme in NAMING_SCHEMES:

@@ -11,11 +11,14 @@ import queue
 if TYPE_CHECKING:
     from src.cd_ripper import CDRipper
 
+import logging
 from src.i18n import _
 from src.cd_manager import CDManager, DriveEvent, CDInfo
 from src.cd_reader import CDReader, AlbumInfo
 from src.cd_ripper import ConflictAction, run_rip, build_destination_path
 from src.ui.track_list import TrackList
+
+logger = logging.getLogger(__name__)
 
 class WindowState(IntEnum):
     EMPTY = 0
@@ -162,16 +165,12 @@ class RipperWindow(Adw.ApplicationWindow):
 
         self.stack.set_visible_child_name("no-drive")
 
-        self._cd_manager = CDManager(on_event=self._on_cd_event)
+        logger.info("RipperWindow init with requested_device=%s", self._requested_device)
+        self._cd_manager = CDManager(on_event=self._on_cd_event, preferred_host=self._requested_device)
         self._cd_manager.start()
 
-        # If launched as the default handler for a specific drive (Exec %f),
-        # scan that drive directly instead of waiting for/ relying on the
-        # auto-detected event (matters when several drives are present).
-        if self._requested_device:
-            GLib.idle_add(self._scan_cd, self._requested_device)
-
     def _build_menu(self) -> Gio.Menu:
+        logger.debug("RipperWindow._build_menu")
         menu = Gio.Menu()
         menu.append(_("Preferences"), "app.preferences")
         menu.append(_("About"), "app.about")
@@ -179,20 +178,25 @@ class RipperWindow(Adw.ApplicationWindow):
         return menu
 
     def _on_eject_clicked(self, button):
+        logger.debug("RipperWindow._on_eject_clicked")
         if self._current_cd_info and self._cd_manager is not None:
             self._cd_manager.eject_drive(self._current_cd_info.drive_object_path)
 
     def _on_select_all_clicked(self, button):
+        logger.debug("RipperWindow._on_select_all_clicked")
         self.track_list.select_all()
 
     def _on_select_none_clicked(self, button):
+        logger.debug("RipperWindow._on_select_none_clicked")
         self.track_list.deselect_all()
 
     def _on_rip_clicked(self, button):
+        logger.info("RipperWindow._on_rip_clicked")
         if self._cd_manager is None or self._current_cd_info is None:
             return
         tracks = self.track_list.get_selected_tracks()
         if not tracks:
+            logger.warning("RipperWindow no tracks selected for rip")
             return
         from src.settings import Settings
         settings = Settings()
@@ -204,12 +208,16 @@ class RipperWindow(Adw.ApplicationWindow):
         )
         self._rip_settings = settings
         device_path = self._current_cd_info.device_path
+        logger.info("RipperWindow starting rip for %s tracks=%d", device_path, len(tracks))
         self._start_rip_process(device_path, settings, album, tracks)
 
     def _start_rip_process(self, device_path, settings, album, tracks):
+        logger.info("RipperWindow._start_rip_process device=%s format=%s output_dir=%s",
+                     device_path, settings.output_format, settings.output_dir)
         self.rip_button.set_sensitive(False)
         self.select_all_button.set_sensitive(False)
         self.select_none_button.set_sensitive(False)
+        self.eject_button.set_sensitive(False)
         self.rip_progress_box.set_visible(True)
         self.abort_button.set_visible(True)
         self.abort_button.set_sensitive(True)
@@ -227,15 +235,18 @@ class RipperWindow(Adw.ApplicationWindow):
         cancel = ctx.Event()
         p = ctx.Process(target=run_rip,
                         args=(q, response_q, cancel, device_path, settings, album, tracks))
+        logger.debug("RipperWindow spawning rip subprocess pid=%r", getattr(p, 'pid', None))
         p.start()
         self._rip_process = p
         self._rip_queue = q
         self._rip_response_q = response_q
         self._rip_cancel = cancel
         self._rip_timer = GLib.timeout_add(40, self._poll_rip_queue)
+        logger.info("RipperWindow rip process pid=%d timer=%d", p.pid, self._rip_timer)
 
     def _poll_rip_queue(self):
         if self._rip_process is None or self._rip_queue is None:
+            logger.debug("RipperWindow._poll_rip_queue no process/queue, removing timer")
             return False
         q = self._rip_queue
         while True:
@@ -243,10 +254,12 @@ class RipperWindow(Adw.ApplicationWindow):
                 kind, payload = q.get_nowait()
             except queue.Empty:
                 break
+            logger.debug("RipperWindow._poll_rip_queue received kind=%s", kind)
             self._handle_rip_message(kind, payload)
             if self._rip_finished:
                 return False
-        if not self._rip_process.is_alive():
+        if self._rip_process is not None and not self._rip_process.is_alive():
+            logger.info("RipperWindow rip process exited (pid=%r)", getattr(self._rip_process, 'pid', None))
             try:
                 kind, payload = q.get_nowait()
             except queue.Empty:
@@ -258,18 +271,32 @@ class RipperWindow(Adw.ApplicationWindow):
         return True
 
     def _handle_rip_message(self, kind, payload):
+        logger.debug("RipperWindow._handle_rip_message kind=%s", kind)
         if kind == 'progress':
             self._on_rip_progress(payload)
         elif kind == 'conflict':
             self._on_rip_conflict(payload, self._rip_response_q.put)
         elif kind == 'done':
+            logger.info("RipperWindow rip completed successfully")
             self._rip_finished = True
             self._finish_rip(None)
         elif kind == 'error':
+            logger.error("RipperWindow rip failed: %s", payload)
             self._rip_finished = True
             self._finish_rip(payload)
+        elif kind == 'cancelled':
+            logger.info("RipperWindow rip cancelled by user")
+            self._rip_finished = True
+            self._show_dialog(_("Ripping cancelled"), _("Ripping was cancelled."))
+            self._finish_rip(None)
+
+    def _show_dialog(self, title: str, body: str):
+        dialog = Adw.MessageDialog.new(self, title, body)
+        dialog.add_response("ok", _("OK"))
+        dialog.present()
 
     def _finish_rip(self, error_message):
+        logger.info("RipperWindow._finish_rip error=%s", error_message or 'None')
         if self._rip_timer:
             GLib.source_remove(self._rip_timer)
             self._rip_timer = None
@@ -282,6 +309,9 @@ class RipperWindow(Adw.ApplicationWindow):
         self._on_rip_done(error_message, None)
 
     def _on_rip_progress(self, progress):
+        logger.debug("RipperWindow._on_rip_progress track=%d/%d overall=%d/%d finished=%s",
+                     progress.track_number, (progress.total // 75) if progress.total else 0,
+                     progress.overall_current, progress.overall_total, progress.finished)
         if progress.overall_total > 0:
             overall = progress.overall_current / progress.overall_total
             self.rip_progress_bar.set_fraction(overall)
@@ -319,6 +349,7 @@ class RipperWindow(Adw.ApplicationWindow):
         return False
 
     def _on_abort_clicked(self, button):
+        logger.info("RipperWindow._on_abort_clicked")
         if getattr(self, '_conflict_dialog', None) is not None:
             self._conflict_dialog.response('cancel')
         if self._rip_cancel is not None:
@@ -327,9 +358,11 @@ class RipperWindow(Adw.ApplicationWindow):
         self.rip_progress_label.set_text(_("Cancelling…"))
 
     def _cancel_rip_process(self):
+        logger.info("RipperWindow._cancel_rip_process cancelling and terminating rip subprocess")
         # Terminate the rip subprocess if it is still running so it does not
         # keep the drive busy (and the disc spinning) after the window closes.
         if self._rip_process is not None and self._rip_process.is_alive():
+            logger.debug("RipperWindow terminating pid=%r", getattr(self._rip_process, 'pid', None))
             if self._rip_cancel is not None:
                 self._rip_cancel.set()
             self._rip_process.terminate()
@@ -346,6 +379,7 @@ class RipperWindow(Adw.ApplicationWindow):
             self._rip_timer = None
 
     def _on_close_request(self, *args):
+        logger.debug("RipperWindow._on_close_request")
         self._cancel_rip_process()
         return False
 
@@ -365,10 +399,11 @@ class RipperWindow(Adw.ApplicationWindow):
         return f"{m}:{s:02d}"
 
     def _on_rip_conflict(self, file_path: str, resolve):
+        logger.info("RipperWindow._on_rip_conflict path=%s", file_path)
         dialog = Adw.MessageDialog.new(
             self,
             _("File already exists"),
-            _("The file “{path}” already exists. What should be done?").format(path=file_path),
+            _("The file \"{path}\" already exists. What should be done?").format(path=file_path),
         )
         dialog.add_response("overwrite", _("Overwrite"))
         dialog.add_response("skip", _("Skip"))
@@ -380,6 +415,7 @@ class RipperWindow(Adw.ApplicationWindow):
         dialog.present()
 
     def _on_rip_conflict_response(self, dialog, response, resolve):
+        logger.debug("RipperWindow._on_rip_conflict_response response=%s", response)
         from src.cd_ripper import ConflictAction
         mapping = {
             'overwrite': ConflictAction.OVERWRITE,
@@ -396,6 +432,7 @@ class RipperWindow(Adw.ApplicationWindow):
         self.rip_button.set_sensitive(True)
         self.select_all_button.set_sensitive(True)
         self.select_none_button.set_sensitive(True)
+        self.eject_button.set_sensitive(True)
         self.abort_button.set_visible(False)
         self.rip_progress_box.set_visible(False)
         if not error_message and getattr(self, '_rip_settings', None) is not None \
@@ -435,27 +472,44 @@ class RipperWindow(Adw.ApplicationWindow):
             pass
 
     def _on_cd_event(self, event: DriveEvent):
+        logger.info("RipperWindow _on_cd_event event_type=%s", event.event_type)
         # When launched for a specific drive, ignore events from other drives
         # so the requested disc stays in view (e.g. two drives present).
         dev = event.cd_info.device_path if event.cd_info else None
-        if self._requested_device and dev and dev != self._requested_device:
-            return
+        if self._requested_device and dev:
+            # Partial match on host name (e.g. 'sr1' in '/dev/sr1')
+            if self._requested_device not in (dev or ''):
+                logger.info("RipperWindow _on_cd_event ignoring event for dev=%s requested=%s", dev, self._requested_device)
+                return
+        logger.info("RipperWindow _on_cd_event processing event for dev=%s requested=%s", dev, self._requested_device)
 
         if event.event_type == 'media_inserted':
+            logger.info("RipperWindow media_inserted for dev=%s", dev)
+            if self._rip_process is not None and self._rip_process.is_alive():
+                self._cancel_rip_process()
             self._current_cd_info = event.cd_info
             self._set_state(WindowState.SCANNING)
             if event.cd_info:
+                logger.info("RipperWindow starting scan for %s", event.cd_info.device_path)
                 self._scan_cd(event.cd_info.device_path)
         elif event.event_type == 'drive_detected':
+            logger.info("RipperWindow drive_detected for dev=%s", dev)
             self._current_cd_info = event.cd_info
             GLib.idle_add(self._set_state, WindowState.NO_MEDIA)
         elif event.event_type == 'media_removed':
+            logger.info("RipperWindow media_removed for dev=%s", dev)
+            if self._rip_process is not None and self._rip_process.is_alive():
+                self._cancel_rip_process()
             self._current_cd_info = event.cd_info
             self._current_album = None
-            if dev == self._requested_device:
+            if dev and self._requested_device and self._requested_device in dev:
+                logger.info("RipperWindow clearing requested_device after media_removed")
                 self._requested_device = None
             GLib.idle_add(self._set_state, WindowState.NO_MEDIA)
         elif event.event_type == 'removed':
+            logger.info("RipperWindow drive removed")
+            if self._rip_process is not None and self._rip_process.is_alive():
+                self._cancel_rip_process()
             self._current_cd_info = None
             self._current_album = None
             GLib.idle_add(self._set_state, WindowState.EMPTY)
@@ -486,6 +540,14 @@ class RipperWindow(Adw.ApplicationWindow):
         thread.start()
 
     def _on_scan_done(self, album: AlbumInfo):
+        # The drive might have been removed while the background scan was running.
+        if self._current_cd_info is None or not self._current_cd_info.has_media:
+            GLib.idle_add(
+                self._set_state,
+                WindowState.NO_MEDIA if self._cd_manager else WindowState.EMPTY,
+            )
+            return
+
         artist = album.artist or ""
         title = album.album_title or album.disc_title or ""
         self._current_album = album
@@ -495,11 +557,14 @@ class RipperWindow(Adw.ApplicationWindow):
         self.artist_label.set_visible(bool(artist))
         self.track_list.set_tracks(album.tracks)
         self._set_state(WindowState.LOADED)
-        if getattr(self, '_scanning_device', None) == self._requested_device:
-            self._requested_device = None
+        if self._scanning_device and self._requested_device:
+            # Check partial match
+            if self._requested_device in self._scanning_device:
+                self._requested_device = None
 
     def _on_scan_error(self, error_message: str):
         self._set_state(WindowState.NO_MEDIA)
         self.status_no_media.set_description(_("Insert an audio CD to scan") + f" ({error_message})")
-        if getattr(self, '_scanning_device', None) == self._requested_device:
-            self._requested_device = None
+        if self._scanning_device and self._requested_device:
+            if self._requested_device in self._scanning_device:
+                self._requested_device = None

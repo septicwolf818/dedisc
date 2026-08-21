@@ -92,9 +92,11 @@ def run_rip(queue, response_queue, cancel_event, device_path, settings, album, t
     ``('conflict', path)`` message and blocking on ``response_queue`` for
     the chosen ``ConflictAction``.
     """
+    logger.info("run_rip started device_path=%s tracks=%d", device_path, len(tracks))
     try:
         rip = CDRipper(settings, album, tracks)
         rip._cancelled = cancel_event
+        logger.info("run_rip creating CDRipper instance")
 
         class _ConflictBridge:
             def ask(self, file_path):
@@ -105,8 +107,14 @@ def run_rip(queue, response_queue, cancel_event, device_path, settings, album, t
             queue.put(('progress', p))
 
         rip.rip(device_path, on_progress, _ConflictBridge())
-        queue.put(('done', None))
+        if cancel_event.is_set():
+            logger.info("run_rip cancelled by user")
+            queue.put(('cancelled', None))
+        else:
+            logger.info("run_rip completed successfully")
+            queue.put(('done', None))
     except Exception as e:
+        logger.error("run_rip failed: %s", e)
         queue.put(('error', str(e)))
 
 
@@ -139,20 +147,26 @@ class CDRipper:
         self.album = album
         self.tracks = tracks
         self._cancelled = threading.Event()
+        logger.info("CDRipper.__init__ created with tracks=%d format=%s destination=%s",
+                     len(tracks), settings.output_format, settings.output_dir)
 
     def cancel(self):
+        logger.info("CDRipper.ctl cancel called")
         self._cancelled.set()
 
     def rip(self, device_path: str, on_progress: Callable[[RipProgress], None],
             conflict_cb: _ConflictResolver):
         """Rip selected tracks. Runs in a worker thread."""
+        logger.info("CDRipper.rip started device_path=%s tracks=%d", device_path, len(self.tracks))
         if cdio is None:
             raise RuntimeError(_("pycdio not installed"))
 
         dev = None
         try:
+            logger.info("CDRipper opening device %s", device_path)
             dev = cdio.Device(device_path)
             if dev.get_disc_mode() != 'CD-DA':
+                logger.error("CDRipper device %s is not an audio CD", device_path)
                 raise RuntimeError(_("Device is not an audio CD"))
 
             self._album_total = 0
@@ -160,16 +174,20 @@ class CDRipper:
                 tobj = dev.get_track(track.track_number)
                 self._album_total += (tobj.get_track_sec_count() or 0) * AUDIO_FRAME_BYTES
             self._completed_bytes = 0
+            logger.info("CDRipper device opened, album_total=%d bytes", self._album_total)
 
             scheme = self.settings.get_naming_scheme()
             extension = self.settings.get_output_extension()
 
             for track in self.tracks:
                 if self._cancelled.is_set():
+                    logger.info("CDRipper.rip cancelled before track %d", track.track_number)
                     break
                 target = self._destination_path(track, scheme, extension)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 if target.exists():
+                    logger.warning("CDRipper.rip conflict detected for track %d path=%s",
+                                   track.track_number, target)
                     action = conflict_cb.ask(str(target))
                     if action == ConflictAction.CANCEL:
                         break
@@ -186,14 +204,20 @@ class CDRipper:
                     pass
 
     def _destination_path(self, track: TrackInfo, scheme: NamingScheme, extension: str) -> Path:
-        return build_destination_path(
+        path = build_destination_path(
             self.settings.output_dir, scheme, extension,
             self.album.artist, self.album.album_title or self.album.disc_title,
             track.track_number, track.title,
         )
+        logger.debug("CDRipper._destination_path track=%d artist=%s album=%s → %s",
+                     track.track_number, self.album.artist or '',
+                     (self.album.album_title or '') or (self.album.disc_title or ''), path)
+        return path
 
     def _rip_track(self, dev, track: TrackInfo, target: Path,
                    on_progress: Callable[[RipProgress], None]):
+        logger.info("CDRipper._rip_track track=%d '%s' → %s",
+                     track.track_number, track.title or '', target)
         track_obj = dev.get_track(track.track_number)
         lsn = track_obj.get_lsn() or 0
         total_frames = track_obj.get_track_sec_count() or 0
@@ -209,6 +233,7 @@ class CDRipper:
 
         while remaining > 0:
             if self._cancelled.is_set():
+                logger.info("CDRipper._rip_track track %d interrupted", track.track_number)
                 break
             n = min(CHUNK_SECTORS, remaining)
             drc, chunk = dev.read_sectors(pos, pycdio.READ_MODE_AUDIO, n)
@@ -234,6 +259,8 @@ class CDRipper:
             ))
 
         if self._cancelled.is_set():
+            logger.info("CDRipper._rip_track track %d cancelled after writing %d bytes",
+                        track.track_number, written)
             tmp_target.unlink(missing_ok=True)
             return
 
@@ -251,6 +278,8 @@ class CDRipper:
         os.replace(tmp_target, target)
         self._write_tags(target, self.settings.output_format, track)
         self._completed_bytes += total_frames * AUDIO_FRAME_BYTES
+        logger.info("CDRipper._rip_track track %d completed size=%d bytes format=%s",
+                     track.track_number, total_frames * AUDIO_FRAME_BYTES, self.settings.output_format)
         on_progress(RipProgress(
             track_number=track.track_number,
             track_title=track.title or '',
@@ -317,10 +346,12 @@ class CDRipper:
         try:
             import lameenc
         except ImportError:
+            logger.warning("CDRipper._write_mp3 lameenc not available, falling back to soundfile")
             with sf.SoundFile(str(target), 'w', samplerate=44100, channels=2,
                                format='MP3', subtype='MPEG_LAYER_III') as f:
                 f.write(audio)
             return
+        logger.debug("CDRipper._write_mp3 encoding %d samples to %s", len(audio), target)
         enc = lameenc.Encoder()
         enc.set_bit_rate(320)
         enc.set_in_sample_rate(44100)
@@ -329,3 +360,4 @@ class CDRipper:
         data = enc.encode(audio.tobytes()) + enc.flush()
         with open(target, 'wb') as fh:
             fh.write(data)
+        logger.info("CDRipper._write_mp3 completed size=%d bytes", len(data))

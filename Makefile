@@ -54,7 +54,7 @@ run: check-python
 	$(call step,Installing runtime dependencies)
 	@grep -v '^pycdio' requirements.txt | .venv/bin/pip install -r /dev/stdin >/dev/null 2>&1
 	$(call step,Launching Dedisc)
-	@PYTHONPATH=$(CURDIR) .venv/bin/python src/main.py
+	@PYTHONPATH=$(CURDIR) .venv/bin/python src/main.py 2>&1 | tee -a $(HOME)/.local/share/Dedisc/dedisc-run.log
 
 install: check-python
 	$(call step,Installing Dedisc to $(INSTALL_DIR))

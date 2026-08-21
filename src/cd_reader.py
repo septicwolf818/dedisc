@@ -39,22 +39,31 @@ class CDReader:
         if cdio is None:
             raise CDReaderError("pycdio not installed")
 
+        logger.info("CDReader.scan_cd started device_path=%s max_attempts=%d", device_path, max_attempts)
         for attempt in range(1, max_attempts + 1):
+            logger.debug("CDReader.scan_cd attempt %d of %d for %s", attempt, max_attempts, device_path)
             album = CDReader._scan_once(device_path)
+            logger.info("CDReader.scan_cd attempt %d result has_cdtext=%d tracks=%d",
+                        attempt, 1 if album.has_cdtext() else 0, len(album.tracks))
             if attempt < max_attempts and not album.has_cdtext():
                 time.sleep(1)
                 continue
+            logger.info("CDReader.scan_cd returning after %d attempt(s)", attempt)
             return album
+        logger.info("CDReader.scan_cd returning final result after reaching max_attempts")
         return CDReader._scan_once(device_path)
 
     @staticmethod
     def _scan_once(device_path: str) -> AlbumInfo:
+        logger.info("CDReader._scan_once opening device=%s", device_path)
         device = None
         album_info = AlbumInfo()
 
         try:
             device = cdio.Device(device_path)
             if device.get_disc_mode() != 'CD-DA':
+                err_msg = "Device %s is not an audio CD (mode=%s)", device_path, device.get_disc_mode()
+                logger.error("CDReader._scan_once %s", err_msg[0] % err_msg[1:])
                 raise CDReaderError("Device is not an audio CD")
 
             num_tracks = device.get_num_tracks()

@@ -3,11 +3,15 @@ gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw
 
+import logging
+
 from src.i18n import _
 from src.settings import Settings, NAMING_SCHEMES, OUTPUT_FORMATS
 from src.cd_manager import CDManager
 from src.cd_reader import AlbumInfo
 from src.cd_ripper import build_destination_path
+
+logger = logging.getLogger(__name__)
 
 PREVIEW_ARTIST = _('Artist')
 PREVIEW_ALBUM = _('Album')
@@ -139,6 +143,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
 
     def _populate_drives(self):
         drives = self.cd_manager.get_drives()
+        logger.info("PreferencesWindow._populate_drives Tracks logged=%d", len(drives))
         labels = []
         self._drive_obj_paths = []
         for info in drives:
@@ -161,6 +166,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
         return (PREVIEW_ARTIST, PREVIEW_ALBUM, 1, PREVIEW_TITLE)
 
     def _update_preview(self):
+        logger.debug("PreferencesWindow._update_preview")
         scheme = self.settings.get_naming_scheme()
         extension = self.settings.get_output_extension()
         artist, album, track_number, title = self._preview_track()
@@ -198,6 +204,7 @@ class PreferencesWindow(Adw.PreferencesWindow):
         self.settings.save()
 
     def _on_choose_clicked(self, button):
+        logger.info("PreferencesWindow._on_choose_clicked")
         dialog = Gtk.FileDialog()
         dialog.set_title(_("Choose Output Folder"))
         dialog.select_folder(self, None, self._on_folder_selected, None)
@@ -209,5 +216,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
             return
         self.settings.output_dir = folder.get_path()
         self.settings.save()
+        logger.info("PreferencesWindow selected output dir=%s", self.settings.output_dir)
         self.output_dir_row.set_subtitle(self.settings.output_dir)
         self._update_preview()

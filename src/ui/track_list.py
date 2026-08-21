@@ -1,9 +1,12 @@
 import gi
+import logging
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Gio, GObject
 from src.i18n import _
 from src.cd_reader import TrackInfo, CDReader
+
+logger = logging.getLogger(__name__)
 
 
 class TrackItem(GObject.Object):
@@ -110,9 +113,11 @@ class TrackList(Gtk.ScrolledWindow):
         self.columns.append_column(column)
 
     def set_tracks(self, tracks):
+        logger.info("TrackList.set_tracks count=%d", len(tracks))
         self.model.splice(0, len(self.model), [TrackItem(t) for t in tracks])
 
     def get_selected_tracks(self):
+        logger.info("TrackList.get_selected_tracks")
         result = []
         for i in range(len(self.model)):
             item = self.model.get_item(i)
@@ -121,6 +126,7 @@ class TrackList(Gtk.ScrolledWindow):
         return result
 
     def select_all(self):
+        logger.info("TrackList.select_all count=%d", len(self.model))
         for i in range(len(self.model)):
             self.model.get_item(i).selected = True
 
