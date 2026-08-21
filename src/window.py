@@ -142,6 +142,10 @@ class RipperWindow(Adw.ApplicationWindow):
         self.rip_status_row.append(self.abort_button)
         self.rip_progress_box.append(self.rip_status_row)
 
+        self.track_progress_bar = Gtk.ProgressBar()
+        self.track_progress_bar.set_show_text(True)
+        self.rip_progress_box.append(self.track_progress_bar)
+
         self.rip_progress_bar = Gtk.ProgressBar()
         self.rip_progress_bar.set_show_text(True)
         self.rip_progress_box.append(self.rip_progress_bar)
@@ -240,6 +244,8 @@ class RipperWindow(Adw.ApplicationWindow):
         self.abort_button.set_sensitive(True)
         self.rip_progress_bar.set_fraction(0.0)
         self.rip_progress_bar.set_text(_("Preparing…"))
+        self.track_progress_bar.set_fraction(0.0)
+        self.track_progress_bar.set_text(_("Preparing…"))
         self._rip_start_time = None
         self._rip_last_overall = 0
         self._rip_finished = False
@@ -300,9 +306,23 @@ class RipperWindow(Adw.ApplicationWindow):
 
     def _on_rip_progress(self, progress):
         if progress.overall_total > 0:
-            self.rip_progress_bar.set_fraction(progress.overall_current / progress.overall_total)
+            overall = progress.overall_current / progress.overall_total
+            self.rip_progress_bar.set_fraction(overall)
+            self.rip_progress_bar.set_text(
+                _("Overall: {percent}%").format(percent=int(overall * 100)))
+        if progress.total > 0:
+            track = progress.current / progress.total
+            self.track_progress_bar.set_fraction(track)
+            self.track_progress_bar.set_text(
+                _("Track {number}: {percent}%").format(
+                    number=progress.track_number, percent=int(track * 100)))
+
         if progress.finished:
+            self.rip_progress_bar.set_fraction(1.0)
+            self.track_progress_bar.set_fraction(1.0)
             self.rip_progress_bar.set_text(None)
+            self.track_progress_bar.set_text(None)
+            self.rip_progress_label.set_text(_("Ripping finished"))
             return False
 
         label = _("Ripping track {number}…").format(number=progress.track_number)
@@ -312,12 +332,12 @@ class RipperWindow(Adw.ApplicationWindow):
                 self._rip_start_time = now
             elapsed = now - self._rip_start_time
             if elapsed >= 1.0:
-                self.rip_progress_bar.set_text(None)
                 speed = progress.overall_current / elapsed
                 remaining = progress.overall_total - progress.overall_current
                 eta = remaining / speed if speed > 0 else 0
-                label = "{}   {}   {}".format(
-                    label, self._format_speed(speed), self._format_time(eta))
+                label = "{0}   {1}   {2}".format(
+                    label, self._format_speed(speed),
+                    _("ETA {time}").format(time=self._format_time(eta)))
         self.rip_progress_label.set_text(label)
         return False
 

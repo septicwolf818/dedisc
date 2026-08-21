@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 13:52+0200\n"
+"POT-Creation-Date: 2026-08-21 14:46+0200\n"
 "PO-Revision-Date: 2026-08-20 00:00+0000\n"
 "Last-Translator: Rafał Widło <rafal@septicwolf818.pl>\n"
 "Language-Team: Polish\n"
@@ -12,101 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-
-#: src/window.py:27 src/window.py:45 src/ui/about.py:16
-msgid "Dedisc"
-msgstr "Dedisc"
-
-#: src/window.py:49
-msgid "Eject Disc"
-msgstr "Wysuń płytę"
-
-#: src/window.py:56
-msgid "Main Menu"
-msgstr "Menu główne"
-
-#: src/window.py:73
-msgid "Scanning..."
-msgstr "Skanowanie..."
-
-#: src/window.py:106
-msgid "Select all"
-msgstr "Zaznacz wszystkie"
-
-#: src/window.py:108
-msgid "Select none"
-msgstr "Odznacz wszystkie"
-
-#: src/window.py:113
-msgid "Rip selected"
-msgstr "Zgraj zaznaczone"
-
-#: src/window.py:129 src/window.py:274
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: src/window.py:131
-msgid "Abort ripping"
-msgstr "Przerwij zgrywanie"
-
-#: src/window.py:161 src/ui/preferences.py:37
-msgid "Preferences"
-msgstr "Preferencje"
-
-#: src/window.py:162
-msgid "About"
-msgstr "O programie"
-
-#: src/window.py:163
-msgid "Homepage"
-msgstr "Strona domowa"
-
-#: src/window.py:201
-msgid "Preparing…"
-msgstr "Przygotowywanie…"
-
-#: src/window.py:228
-#, python-brace-format
-msgid "Ripping track {number}…"
-msgstr "Zgrywanie ścieżki {number}…"
-
-#: src/window.py:249
-msgid "Cancelling…"
-msgstr "Anulowanie…"
-
-#: src/window.py:255
-#, python-brace-format
-msgid "{} MB/s (×{:.1f})"
-msgstr "{} MB/s (×{:.1f})"
-
-#: src/window.py:269
-msgid "File already exists"
-msgstr "Plik już istnieje"
-
-#: src/window.py:270
-#, python-brace-format
-msgid "The file “{path}” already exists. What should be done?"
-msgstr "Plik „{path}” już istnieje. Co należy zrobić?"
-
-#: src/window.py:272
-msgid "Overwrite"
-msgstr "Nadpisz"
-
-#: src/window.py:273
-msgid "Skip"
-msgstr "Pomiń"
-
-#: src/window.py:305
-msgid "Ripping failed"
-msgstr "Zgrywanie nie powiodło się"
-
-#: src/window.py:308
-msgid "OK"
-msgstr "OK"
-
-#: src/window.py:400 src/ui/status_page.py:18
-msgid "Insert an audio CD to scan"
-msgstr "Włóż płytę audio CD do skanowania"
 
 #: src/cd_manager.py:242
 #, python-format
@@ -118,86 +23,184 @@ msgstr "Wysunięto napęd %s"
 msgid "Eject failed for %s: %s"
 msgstr "Nie udało się wysunąć %s: %s"
 
-#: src/cd_ripper.py:84
+#: src/cd_ripper.py:112
 msgid "Unknown Artist"
 msgstr "Nieznany wykonawca"
 
-#: src/cd_ripper.py:85
+#: src/cd_ripper.py:113
 msgid "Unknown Album"
 msgstr "Nieznany album"
 
-#: src/cd_ripper.py:86
+#: src/cd_ripper.py:114
 #, python-brace-format
 msgid "Track {number}"
 msgstr "Ścieżka {number}"
 
-#: src/cd_ripper.py:118
+#: src/cd_ripper.py:146
 msgid "pycdio not installed"
 msgstr "pycdio nie jest zainstalowane"
 
-#: src/cd_ripper.py:124
+#: src/cd_ripper.py:152
 msgid "Device is not an audio CD"
 msgstr "Urządzenie nie jest płytą audio CD"
 
-#: src/settings.py:25
+#: src/settings.py:22
 msgid "Artist / Album / Track - Title"
 msgstr "Wykonawca / Album / Ścieżka - Tytuł"
 
-#: src/settings.py:31
+#: src/settings.py:28
 msgid "Artist / Album / Track. Title"
 msgstr "Wykonawca / Album / Ścieżka. Tytuł"
 
-#: src/settings.py:37
+#: src/settings.py:34
 msgid "Artist / Album / Title"
 msgstr "Wykonawca / Album / Tytuł"
 
-#: src/settings.py:43
+#: src/settings.py:40
 msgid "Artist - Album / Track - Artist - Title"
 msgstr "Wykonawca - Album / Ścieżka - Wykonawca - Tytuł"
 
-#: src/settings.py:49
+#: src/settings.py:46
 msgid "Artist / Album / Track - Title - Artist"
 msgstr "Wykonawca / Album / Ścieżka - Tytuł - Wykonawca"
 
-#: src/settings.py:55
+#: src/settings.py:52
 msgid "Album / Track - Title"
 msgstr "Album / Ścieżka - Tytuł"
 
-#: src/settings.py:61
+#: src/settings.py:58
 msgid "Album / Track - Artist - Title"
 msgstr "Album / Ścieżka - Wykonawca - Tytuł"
 
-#: src/settings.py:67
+#: src/settings.py:64
 msgid "Artist / Track - Title"
 msgstr "Wykonawca / Ścieżka - Tytuł"
 
-#: src/ui/track_list.py:86
-msgid "Select"
-msgstr "Zaznacz"
+#: src/window.py:30 src/window.py:53 src/ui/about.py:16
+msgid "Dedisc"
+msgstr "Dedisc"
 
-#: src/ui/track_list.py:93
-msgid "Track"
-msgstr "Ścieżka"
+#: src/window.py:57
+msgid "Eject Disc"
+msgstr "Wysuń płytę"
 
-#: src/ui/track_list.py:100 src/ui/preferences.py:14
-msgid "Title"
-msgstr "Tytuł"
+#: src/window.py:64
+msgid "Main Menu"
+msgstr "Menu główne"
 
-#: src/ui/track_list.py:107
-msgid "Duration"
-msgstr "Czas"
+#: src/window.py:81
+msgid "Scanning..."
+msgstr "Skanowanie..."
 
-#: src/ui/status_page.py:10
-msgid "No drive detected"
-msgstr "Nie wykryto napędu"
+#: src/window.py:114
+msgid "Select all"
+msgstr "Zaznacz wszystkie"
 
-#: src/ui/status_page.py:11
-msgid "Check that a CD drive is connected"
-msgstr "Sprawdź, czy napęd CD jest podłączony"
+#: src/window.py:116
+msgid "Select none"
+msgstr "Odznacz wszystkie"
 
-#: src/ui/status_page.py:17
-msgid "No CD inserted"
-msgstr "Nie włożono płyty CD"
+#: src/window.py:121
+msgid "Rip selected"
+msgstr "Zgraj zaznaczone"
+
+#: src/window.py:137 src/window.py:373
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: src/window.py:139
+msgid "Abort ripping"
+msgstr "Przerwij zgrywanie"
+
+#: src/window.py:173 src/ui/preferences.py:37
+msgid "Preferences"
+msgstr "Preferencje"
+
+#: src/window.py:174
+msgid "About"
+msgstr "O programie"
+
+#: src/window.py:175
+msgid "Homepage"
+msgstr "Strona domowa"
+
+#: src/window.py:246 src/window.py:248
+msgid "Preparing…"
+msgstr "Przygotowywanie…"
+
+#: src/window.py:278
+msgid "Ripping process exited unexpectedly"
+msgstr ""
+
+#: src/window.py:312
+#, python-brace-format
+msgid "Overall: {percent}%"
+msgstr "Łącznie: {percent}%"
+
+#: src/window.py:317
+#, python-brace-format
+msgid "Track {number}: {percent}%"
+msgstr "Ścieżka {number}: {percent}%"
+
+#: src/window.py:325
+msgid "Ripping finished"
+msgstr "Zgrywanie zakończone"
+
+#: src/window.py:328
+#, python-brace-format
+msgid "Ripping track {number}…"
+msgstr "Zgrywanie ścieżki {number}…"
+
+#: src/window.py:340
+#, python-brace-format
+msgid "ETA {time}"
+msgstr "ETA {time}"
+
+#: src/window.py:348
+msgid "Cancelling…"
+msgstr "Anulowanie…"
+
+#: src/window.py:354
+#, python-brace-format
+msgid "{} MB/s (×{:.1f})"
+msgstr "{} MB/s (×{:.1f})"
+
+#: src/window.py:368
+msgid "File already exists"
+msgstr "Plik już istnieje"
+
+#: src/window.py:369
+#, python-brace-format
+msgid "The file “{path}” already exists. What should be done?"
+msgstr "Plik „{path}” już istnieje. Co należy zrobić?"
+
+#: src/window.py:371
+msgid "Overwrite"
+msgstr "Nadpisz"
+
+#: src/window.py:372
+msgid "Skip"
+msgstr "Pomiń"
+
+#: src/window.py:403
+msgid "Ripping failed"
+msgstr "Zgrywanie nie powiodło się"
+
+#: src/window.py:406
+msgid "OK"
+msgstr "OK"
+
+#: src/window.py:498 src/ui/status_page.py:18
+msgid "Insert an audio CD to scan"
+msgstr "Włóż płytę audio CD do skanowania"
+
+#: src/ui/about.py:23
+msgid "An offline CD scanner and ripper for GNOME"
+msgstr "Offline'owy skaner i ripper CD dla GNOME"
+
+#: src/ui/about.py:24
+msgid "Website"
+msgstr "Strona internetowa"
 
 #: src/ui/preferences.py:12
 msgid "Artist"
@@ -206,6 +209,10 @@ msgstr "Wykonawca"
 #: src/ui/preferences.py:13
 msgid "Album"
 msgstr "Album"
+
+#: src/ui/preferences.py:14 src/ui/track_list.py:100
+msgid "Title"
+msgstr "Tytuł"
 
 #: src/ui/preferences.py:45
 msgid "General"
@@ -271,52 +278,68 @@ msgstr "Format plików używany podczas zgrywania ścieżek"
 msgid "Choose Output Folder"
 msgstr "Wybierz folder wyjściowy"
 
-#: src/ui/about.py:23
-msgid "An offline CD scanner and ripper for GNOME"
-msgstr "Offline'owy skaner i ripper CD dla GNOME"
+#: src/ui/status_page.py:10
+msgid "No drive detected"
+msgstr "Nie wykryto napędu"
 
-#: src/ui/about.py:24
-msgid "Website"
-msgstr "Strona internetowa"
+#: src/ui/status_page.py:11
+msgid "Check that a CD drive is connected"
+msgstr "Sprawdź, czy napęd CD jest podłączony"
 
-msgid "Preview"
-msgstr "Podgląd"
+#: src/ui/status_page.py:17
+msgid "No CD inserted"
+msgstr "Nie włożono płyty CD"
 
-msgid "Example destination for the first track"
-msgstr "Przykładowa lokalizacja pierwszej ścieżki"
+#: src/ui/track_list.py:86
+msgid "Select"
+msgstr "Zaznacz"
 
-msgid "_Cancel"
-msgstr "Anuluj"
+#: src/ui/track_list.py:93
+msgid "Track"
+msgstr "Ścieżka"
 
-msgid "Refresh"
-msgstr "Odśwież"
+#: src/ui/track_list.py:107
+msgid "Duration"
+msgstr "Czas"
 
-msgid "Audio CD detected"
-msgstr "Wykryto płytę audio CD"
+#~ msgid "Preview"
+#~ msgstr "Podgląd"
 
-msgid " tracks found"
-msgstr " ścieżek znaleziono"
+#~ msgid "Example destination for the first track"
+#~ msgstr "Przykładowa lokalizacja pierwszej ścieżki"
 
-msgid "%d track found"
-msgstr "%d ścieżka znaleziona"
+#~ msgid "_Cancel"
+#~ msgstr "Anuluj"
 
-msgid "%d tracks found"
-msgstr "%d ścieżki znaleziono"
+#~ msgid "Refresh"
+#~ msgstr "Odśwież"
 
-msgid "Track title is not available on this CD"
-msgstr "Tytuł ścieżki nie jest dostępny na tej płycie"
+#~ msgid "Audio CD detected"
+#~ msgstr "Wykryto płytę audio CD"
 
-msgid "CD-Text metadata unavailable"
-msgstr "Metadane CD-Text są niedostępne"
+#~ msgid " tracks found"
+#~ msgstr " ścieżek znaleziono"
 
-msgid "{number}. {title}  ({duration})"
-msgstr "{number}. {title}  ({duration})"
+#~ msgid "%d track found"
+#~ msgstr "%d ścieżka znaleziona"
 
-msgid "Drive Error"
-msgstr "Błąd napędu"
+#~ msgid "%d tracks found"
+#~ msgstr "%d ścieżki znaleziono"
 
-msgid "Failed to read drive information"
-msgstr "Nie udało się odczytać informacji o napędzie"
+#~ msgid "Track title is not available on this CD"
+#~ msgstr "Tytuł ścieżki nie jest dostępny na tej płycie"
 
-msgid "Checking for optical drives..."
-msgstr "Sprawdzanie napędów optycznych..."
+#~ msgid "CD-Text metadata unavailable"
+#~ msgstr "Metadane CD-Text są niedostępne"
+
+#~ msgid "{number}. {title}  ({duration})"
+#~ msgstr "{number}. {title}  ({duration})"
+
+#~ msgid "Drive Error"
+#~ msgstr "Błąd napędu"
+
+#~ msgid "Failed to read drive information"
+#~ msgstr "Nie udało się odczytać informacji o napędzie"
+
+#~ msgid "Checking for optical drives..."
+#~ msgstr "Sprawdzanie napędów optycznych..."
