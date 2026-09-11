@@ -14,26 +14,30 @@
       <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
   </defs>
-
+ 
   <!-- background -->
   <circle cx="128" cy="128" r="120" fill="#0B0B0C"/>
-
+ 
   <!-- disc -->
   <circle cx="128" cy="128" r="80" fill="#0A0A0A"/>
   <circle cx="128" cy="128" r="80" fill="none" stroke="#1F1F23" stroke-width="2"/>
-
+ 
   <!-- rainbow data track -->
   <circle cx="128" cy="128" r="70" fill="none" stroke="url(#rainbow)" stroke-width="6"/>
   <circle cx="128" cy="128" r="70" fill="none" stroke="#0A0A0A" stroke-width="2"/>
-
+ 
   <!-- inner track -->
   <circle cx="128" cy="128" r="52" fill="none" stroke="#2A2A30" stroke-width="1" opacity="0.6"/>
-
+ 
   <!-- center hub -->
   <circle cx="128" cy="128" r="20" fill="#FFFFFF"/>
   <circle cx="128" cy="128" r="20" fill="none" stroke="#000000" stroke-opacity="0.15" stroke-width="2"/>
   <circle cx="128" cy="128" r="6" fill="#0A0A0A"/>
-
+ 
   <!-- glow halo -->
   <circle cx="128" cy="128" r="88" fill="url(#glow)"/>
+ 
+  <!-- arrow, bottom-right corner -->
+  <polygon points="176,158 202,158 202,190 214,190 189,220 164,190 176,190"
+           fill="#FFFFFF"/>
 </svg>
