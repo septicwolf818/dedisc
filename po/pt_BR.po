@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dedisc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 22:08+0200\n"
+"POT-Creation-Date: 2026-11-02 16:10+0100\n"
 "PO-Revision-Date: 2026-08-21 23:37+0200\n"
 "Last-Translator: Rafał Widło <rafal.widlo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -66,133 +66,138 @@ msgstr "Álbum / Faixa - Artista - Título"
 msgid "Artist / Track - Title"
 msgstr "Artista / Faixa - Título"
 
-#: src/window.py:33 src/window.py:57 src/ui/about.py:16
+#: src/window.py:33 src/window.py:59 src/ui/about.py:16
 msgid "Dedisc"
 msgstr "Dedisc"
 
-#: src/window.py:61
+#: src/window.py:63
 msgid "Eject Disc"
 msgstr "Ejetar o disco"
 
-#: src/window.py:68
+#: src/window.py:70
 msgid "Main Menu"
 msgstr "Menu principal"
 
-#: src/window.py:85
+#: src/window.py:87
 msgid "Scanning…"
 msgstr "Analisando…"
 
-#: src/window.py:118
+#: src/window.py:120
 msgid "Select all"
 msgstr "Selecionar tudo"
 
-#: src/window.py:120
+#: src/window.py:122
 msgid "Select none"
 msgstr "Desmarcar tudo"
 
-#: src/window.py:125
+#: src/window.py:127
 msgid "Rip selected"
 msgstr "Extrair seleção"
 
-#: src/window.py:141 src/window.py:410
+#: src/window.py:143 src/window.py:443
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/window.py:143
+#: src/window.py:145
 msgid "Abort ripping"
 msgstr "Interromper a extração"
 
-#: src/window.py:175 src/ui/preferences.py:41
+#: src/window.py:186 src/ui/preferences.py:41
 msgid "Preferences"
 msgstr "Preferências"
 
-#: src/window.py:176
+#: src/window.py:187
 msgid "About"
 msgstr "Sobre"
 
-#: src/window.py:177
+#: src/window.py:188
 msgid "Homepage"
 msgstr "Site"
 
-#: src/window.py:225 src/window.py:227
+#: src/window.py:237 src/window.py:239
 msgid "Preparing…"
 msgstr "Preparando…"
 
-#: src/window.py:266
+#: src/window.py:282
 msgid "Ripping process exited unexpectedly"
 msgstr "O processo de extração terminou inesperadamente"
 
-#: src/window.py:290
+#: src/window.py:306
 msgid "Ripping cancelled"
 msgstr "Extração cancelada"
 
-#: src/window.py:290
+#: src/window.py:306
 msgid "Ripping was cancelled."
 msgstr "A extração foi cancelada."
 
-#: src/window.py:295
+#: src/window.py:311
 msgid "OK"
 msgstr "OK"
 
-#: src/window.py:319
+#: src/window.py:336
 #, python-brace-format
 msgid "Overall: {percent}%"
 msgstr "Total: {percent}%"
 
-#: src/window.py:324
+#: src/window.py:341
 #, python-brace-format
 msgid "Track {number}: {percent}%"
 msgstr "Faixa {number}: {percent}%"
 
-#: src/window.py:332 src/window.py:446
+#: src/window.py:349 src/window.py:479
 msgid "Ripping finished"
 msgstr "Extração concluída"
 
-#: src/window.py:335
+#: src/window.py:352
 #, python-brace-format
 msgid "Ripping track {number}…"
 msgstr "Extraindo a faixa {number}…"
 
-#: src/window.py:347
+#: src/window.py:364
 #, python-brace-format
 msgid "ETA {time}"
 msgstr "Tempo restante: {time}"
 
-#: src/window.py:358
+#: src/window.py:380
+#, python-brace-format
+msgid "Saving to: {path}"
+msgstr "Salvando em: {path}"
+
+#: src/window.py:391
 msgid "Cancelling…"
 msgstr "Cancelando…"
 
-#: src/window.py:390
+#: src/window.py:423
 #, python-brace-format
 msgid "{} MB/s (×{:.1f})"
 msgstr "{} MB/s (×{:.1f})"
 
-#: src/window.py:405
+#: src/window.py:438
 msgid "File already exists"
 msgstr "O arquivo já existe"
 
-#: src/window.py:406
+#: src/window.py:439
 #, python-brace-format
 msgid "The file \"{path}\" already exists. What should be done?"
 msgstr "O arquivo “{path}” já existe. O que deve ser feito?"
 
-#: src/window.py:408
+#: src/window.py:441
 msgid "Overwrite"
 msgstr "Sobrescrever"
 
-#: src/window.py:409
+#: src/window.py:442
 msgid "Skip"
 msgstr "Ignorar"
 
-#: src/window.py:443
+#: src/window.py:476
 msgid "Ripping failed"
 msgstr "Falha na extração"
 
-#: src/window.py:447
+#: src/window.py:480
 msgid "All tracks ripped successfully."
 msgstr "Todas as faixas foram extraídas com sucesso."
 
-#: src/window.py:566 src/ui/status_page.py:18
+#: src/window.py:599 src/ui/status_page.py:18
 msgid "Insert an audio CD to scan"
 msgstr "Insira um CD de áudio para analisá-lo"
 
@@ -226,8 +231,7 @@ msgstr "Unidade de CD"
 
 #: src/ui/preferences.py:53
 msgid "Choose which drive to use when several are connected"
-msgstr ""
-"Escolha qual unidade usar quando várias estiverem conectadas"
+msgstr "Escolha qual unidade usar quando várias estiverem conectadas"
 
 #: src/ui/preferences.py:56
 msgid "Drive"
@@ -306,11 +310,12 @@ msgstr "Faixa"
 msgid "Duration"
 msgstr "Duração"
 
-#. Desktop entry strings - NOT extracted by xgettext; see po/dedisc.pot.
+#. Desktop entry string kept in sync by tools/sync_desktop_po.py; do not remove.
 #: data/dedisc.desktop.in
 msgid "Compact Disc Ripper"
 msgstr "Extrator de CDs"
 
+#. Desktop entry string kept in sync by tools/sync_desktop_po.py; do not remove.
 #: data/dedisc.desktop.in
 msgid "Rip and scan audio CDs on Linux"
 msgstr "Extrai e analisa CDs de áudio no Linux"

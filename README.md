@@ -57,22 +57,32 @@ meson install -C build            # installs to prefix, incl. .mo translations
 
 ## Development
 
-Translations are handled via gettext. To extract UI strings **and** sync
-desktop-entry strings (`GenericName`, `Comment`) into all catalogs:
+Translations are handled via gettext. Refresh the UI template and sync
+desktop-entry strings (`GenericName`, `Comment`) with:
 
 ```bash
 make update-po    # runs xgettext + tools/sync_desktop_po.py (also regenerates po/LINGUAS)
+
+# Merge new and changed UI msgids into every existing language catalog
+for po in po/*.po; do
+  msgmerge --update --no-fuzzy-matching --backup=none "$po" po/dedisc.pot
+done
 ```
 
 Desktop-entry strings are not extracted by xgettext; the sync script appends
 them to every `po/<lang>.po` automatically and they are merged into the
 installed desktop file at install time via `msgfmt --desktop`. Existing
-translations are never overwritten.
+translations are never overwritten. `msgmerge` updates the normal UI catalogs;
+review its output, translate every new or changed UI entry in every language,
+and keep format placeholders such as `{path}` intact. Old msgids no longer in
+the source become obsolete entries rather than being silently discarded.
 
-Verify a translation (`<lang>` = language code, e.g. `pl`):
+Validate all catalogs and their format placeholders:
 
 ```bash
-msgfmt --check -o /dev/null po/<lang>.po
+for po in po/*.po; do
+  msgfmt --check --check-format -o /dev/null "$po"
+done
 ```
 
 To add a new language, create `po/<lang>.po` from the template, then run
@@ -84,6 +94,9 @@ meson install path):
 msginit --locale=<lang> --input=po/dedisc.pot --output=po/<lang>.po
 make update-po
 ```
+
+Then run the `msgmerge` loop above for all catalogs and complete the new
+language's translations before validating them.
 
 The i18n module compiles every `po/<lang>.po` → `po/<lang>/LC_MESSAGES/dedisc.mo` on demand when running from source, so translations are picked up automatically.
 

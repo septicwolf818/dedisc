@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
-from gi.repository import Gtk, Adw, GLib, Gio
+from gi.repository import Gtk, Adw, GLib, Gio, Pango
 from threading import Thread
 import multiprocessing
 import queue
@@ -38,6 +38,8 @@ class RipperWindow(Adw.ApplicationWindow):
         self._current_cd_info = None
         self._current_album: Optional[AlbumInfo] = None
         self._requested_device = device
+        self._rip_settings = None
+        self._rip_album: Optional[AlbumInfo] = None
         self._rip_start_time = None
         self._rip_process = None
         self._rip_queue = None
@@ -150,6 +152,15 @@ class RipperWindow(Adw.ApplicationWindow):
         self.track_progress_bar.set_show_text(True)
         self.rip_progress_box.append(self.track_progress_bar)
 
+        self.rip_target_label = Gtk.Label()
+        self.rip_target_label.set_halign(Gtk.Align.FILL)
+        self.rip_target_label.set_xalign(0.0)
+        self.rip_target_label.set_hexpand(True)
+        self.rip_target_label.set_max_width_chars(80)
+        self.rip_target_label.set_single_line_mode(True)
+        self.rip_target_label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+        self.rip_progress_box.append(self.rip_target_label)
+
         self.rip_progress_bar = Gtk.ProgressBar()
         self.rip_progress_bar.set_show_text(True)
         self.rip_progress_box.append(self.rip_progress_bar)
@@ -207,6 +218,7 @@ class RipperWindow(Adw.ApplicationWindow):
             tracks=tracks,
         )
         self._rip_settings = settings
+        self._rip_album = album
         device_path = self._current_cd_info.device_path
         logger.info("RipperWindow starting rip for %s tracks=%d", device_path, len(tracks))
         self._start_rip_process(device_path, settings, album, tracks)
@@ -225,6 +237,10 @@ class RipperWindow(Adw.ApplicationWindow):
         self.rip_progress_bar.set_text(_("Preparing…"))
         self.track_progress_bar.set_fraction(0.0)
         self.track_progress_bar.set_text(_("Preparing…"))
+        self.rip_target_label.set_text("")
+        self.rip_target_label.set_tooltip_text(None)
+        if tracks:
+            self._show_rip_target(tracks[0].track_number, tracks[0].title or "")
         self._rip_start_time = None
         self._rip_last_overall = 0
         self._rip_finished = False
@@ -312,6 +328,7 @@ class RipperWindow(Adw.ApplicationWindow):
         logger.debug("RipperWindow._on_rip_progress track=%d/%d overall=%d/%d finished=%s",
                      progress.track_number, (progress.total // 75) if progress.total else 0,
                      progress.overall_current, progress.overall_total, progress.finished)
+        self._show_rip_target(progress.track_number, progress.track_title)
         if progress.overall_total > 0:
             overall = progress.overall_current / progress.overall_total
             self.rip_progress_bar.set_fraction(overall)
@@ -347,6 +364,22 @@ class RipperWindow(Adw.ApplicationWindow):
                     _("ETA {time}").format(time=self._format_time(eta)))
         self.rip_progress_label.set_text(label)
         return False
+
+    def _show_rip_target(self, track_number: int, track_title: str):
+        if self._rip_settings is None or self._rip_album is None:
+            return
+        target = build_destination_path(
+            self._rip_settings.output_dir,
+            self._rip_settings.get_naming_scheme(),
+            self._rip_settings.get_output_extension(),
+            self._rip_album.artist,
+            self._rip_album.album_title or self._rip_album.disc_title,
+            track_number,
+            track_title,
+        )
+        status = _("Saving to: {path}").format(path=str(target))
+        self.rip_target_label.set_text(status)
+        self.rip_target_label.set_tooltip_text(status)
 
     def _on_abort_clicked(self, button):
         logger.info("RipperWindow._on_abort_clicked")
