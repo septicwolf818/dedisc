@@ -86,7 +86,11 @@ class RipperApp(Adw.Application):
         from src.window import RipperWindow
         device = getattr(self, '_requested_device', None)
         self._logger.info("do_activate _requested_device=%r", device)
-        win = RipperWindow(application=self, device=device)
+        win = self.get_active_window()
+        if win is None:
+            win = next(iter(self.get_windows()), None)
+        if win is None:
+            win = RipperWindow(application=self, device=device)
         win.present()
 
     def _on_open(self, *args):
